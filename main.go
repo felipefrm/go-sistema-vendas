@@ -2,40 +2,33 @@ package main
 
 import "fmt"
 
+type ListaCliente []Cliente
+type ListaProduto []Produto
+type ListaVenda []Venda
+
 type Database struct {
-	cliente []Cliente
-	produto []Produto
-	venda   []Venda
+	cliente ListaCliente
+	produto ListaProduto
+	venda   ListaVenda
 }
 
 func main() {
 
-	var opcao, opcaocrud int
-	// db := Database{}
-
-	var EntityMap = map[int]string{
-		1: "Cliente",
-		2: "Produto",
-		3: "Venda",
-	}
+	var opcao int
+	db := Database{}
 
 	for {
-		fmt.Printf("\n[1] CRUD Cliente\n[2] CRUD Produto\n[3] CRUD Venda\n[0] Sair\n>>> ")
+		fmt.Printf("\n[1] Gerenciar Clientes\n[2] Gerenciar Produtos\n[3] Gerenciar Vendas\n[0] Sair\n>>> ")
 		fmt.Scanf("%d\n", &opcao)
 
 		if opcao == 0 {
 			break
-		} else if opcao > 0 && opcao <= 3 {
-
-			for {
-
-				fmt.Printf("\n[1] Visualizar %ss\n[2] Adicionar %s\n[3] Alterar %s\n[4] Remover %s\n[0] Voltar\n>>> ",
-					EntityMap[opcao], EntityMap[opcao], EntityMap[opcao], EntityMap[opcao])
-				fmt.Scanf("%d\n", &opcaocrud)
-				if opcaocrud == 0 {
-					break
-				}
-			}
+		} else if opcao == 1 {
+			MenuCliente(&(db.cliente))
+		} else if opcao == 2 {
+			MenuProduto(&(db.produto))
+		} else if opcao == 3 {
+			MenuVenda(&db.venda, &db.cliente, &db.produto)
 		} else {
 			// errado
 		}
