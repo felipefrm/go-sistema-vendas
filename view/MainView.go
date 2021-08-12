@@ -1,5 +1,4 @@
 package view
-//import ("fmt")
 
 type MainOption int
 const (

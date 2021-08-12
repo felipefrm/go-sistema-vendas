@@ -1,17 +1,17 @@
 package controller
 import(
-model "github.com/felipefrm/go-sistema-vendas/model"
-view "github.com/felipefrm/go-sistema-vendas/view"
-dao "github.com/felipefrm/go-sistema-vendas/dao"
+	model "github.com/felipefrm/go-sistema-vendas/model"
+	view "github.com/felipefrm/go-sistema-vendas/view"
+	dao "github.com/felipefrm/go-sistema-vendas/dao"
 )
 
 //type ClienteDao interface{
-	//Create(u *model.Cliente) error
-	//Update(i ClienteIndexType, u *model.Cliente) error
-	//Delete(i ClienteIndexType) error
-	//GetIndex(u *model.Cliente) (ClienteIndexType, error)
-	//GetById(i ClienteIndexType) (model.Cliente, error)
-	//GetAll() ([]model.Cliente, error)
+//Create(u *model.Cliente) error
+//Update(i ClienteIndexType, u *model.Cliente) error
+//Delete(i ClienteIndexType) error
+//GetIndex(u *model.Cliente) (ClienteIndexType, error)
+//GetById(i ClienteIndexType) (model.Cliente, error)
+//GetAll() ([]model.Cliente, error)
 //}
 
 type ClienteDaoController struct{
