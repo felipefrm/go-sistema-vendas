@@ -1,26 +1,33 @@
 package view
-import ("fmt" "os" "bufio")
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
 var stdin = bufio.NewReader(os.Stdin)
+
 //type ClienteDao interface{
-	//Create(u *model.Cliente) error
-	//Update(i ClienteIndexType, u *model.Cliente) error
-	//Delete(i ClienteIndexType) error
-	//GetIndex(u *model.Cliente) (ClienteIndexType, error)
-	//GetById(i ClienteIndexType) (model.Cliente, error)
-	//GetAll() ([]model.Cliente, error)
+//Create(u *model.Cliente) error
+//Update(i ClienteIndexType, u *model.Cliente) error
+//Delete(i ClienteIndexType) error
+//GetIndex(u *model.Cliente) (ClienteIndexType, error)
+//GetById(i ClienteIndexType) (model.Cliente, error)
+//GetAll() ([]model.Cliente, error)
 //}
 
-type ClienteView struct{
-	name string
+type ClienteView struct {
 }
 
-type ClienteViewForm struct{
-	Nome string
-	Sobrenome string
-	Rg string
+type ClienteViewForm struct {
+	Nome       string
+	Sobrenome  string
+	Rg         string
 	Nascimento string
 }
-func (c ClienteView) Create() ClienteViewForm{
+
+func (c ClienteView) Create() (ClienteViewForm, error) {
 	var form ClienteViewForm
 	for {
 		fmt.Printf("\nNome: ")
@@ -58,36 +65,36 @@ func (c ClienteView) Create() ClienteViewForm{
 			break
 		}
 	}
-	return form
+	return form, nil
 }
 
-func (c ClienteView) RequestRG(clientes []model.Cliente) string{
-	var form ClienteViewForm
+func (c ClienteView) RequestRG(clientes []ClienteViewForm) (string, error) {
+	//var form ClienteViewForm
 	var idCliente string
 	for {
 		fmt.Printf("\nIndique o RG do cliente que deseja alterar os dados: [Digite -1 para voltar]\n")
 		//c.VisualizarClientes()
+		c.VisualizeAll(clientes)
 		fmt.Printf("\n>>> ")
 		_, err := fmt.Fscan(stdin, &idCliente)
 		if err != nil {
 			fmt.Print(err)
-		} else if idCliente < 0 {
-			return
-		} else if len(*c) == 0 || idCliente >= len(*c) {
-			fmt.Println("Digite um RG válido.")
+			//} else if idCliente < 0 {
+			//return
+			//} else if len(clientes) == 0 || idCliente >= len(clientes) {
+			//fmt.Println("Digite um RG válido.")
 		} else {
 			break
 		}
 		stdin.ReadString('\n')
 	}
 	//form.Rg = idCliente
-	return idCliente
+	return idCliente, nil
 }
 
-func (c ClienteView) Update(form ClienteViewForm) ClienteViewForm{
-	//var form ClienteViewForm
+func (c ClienteView) Update(cliente ClienteViewForm) (ClienteViewForm, error) {
+	var novodado string
 	var opcao int
-	var cliente ClienteViewForm
 	for {
 		fmt.Printf("\nIndique a informação que deseja alterar:\n")
 		fmt.Printf("\n[1] Nome\n[2] Sobrenome\n[3] RG\n[4] Data de nascimento\n[0] Voltar\n>>> ")
@@ -96,7 +103,7 @@ func (c ClienteView) Update(form ClienteViewForm) ClienteViewForm{
 			fmt.Print(err)
 		} else {
 			if opcao == 0 {
-				return
+				return cliente, nil
 			}
 			fmt.Printf("\nIndique a nova informação a ser inserida: ")
 			fmt.Scanln(&novodado)
@@ -114,15 +121,17 @@ func (c ClienteView) Update(form ClienteViewForm) ClienteViewForm{
 			}
 		}
 	}
-	return form
 }
 
-func (c ClienteView) Visualize(form ClienteViewForm) error{
-	fmt.Printf("(%d)\t%s\t%s\t%s\t%s\n", v.Nome, v.Sobrenome, v.Rg, v.Nascimento)
+func (c ClienteView) Visualize(form ClienteViewForm) error {
+	fmt.Printf("%s\t%s\t%s\t%s\n", form.Nome, form.Sobrenome, form.Rg, form.Nascimento)
+	return nil
 }
 
-func (c ClienteView) VisualizeList(form []ClienteViewForm) error{
+func (c ClienteView) VisualizeAll(form []ClienteViewForm) error {
 	for i, v := range form {
+		fmt.Printf("%d -", i+1)
 		c.Visualize(v)
 	}
+	return nil
 }

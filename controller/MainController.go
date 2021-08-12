@@ -1,27 +1,26 @@
 package controller
-import(
-	model "github.com/felipefrm/go-sistema-vendas/model"
+
+import (
 	view "github.com/felipefrm/go-sistema-vendas/view"
-	dao "github.com/felipefrm/go-sistema-vendas/dao"
 )
 
-type MainDaoController struct{
+type MainDaoController struct {
 	view view.MainView
 }
 
-func (contrlr MainDaoController) OptionsMenu() error{
-	clientedao := dao.ClienteDaoMap{}
-	produtodao := dao.ProdutoDaoMap{}
-	vendadao := dao.VendaDaoMap{}
-	clientecontroller := ClienteDaoController{model: clientedao, view: view.ClienteView{}}
-	produtocontroller := ClienteDaoController{model: clientedao, view: view.ClienteView{}}
+func (contrlr MainDaoController) OptionsMenu() error {
+	//clientedao := dao.ClienteDaoMap{}
+	//produtodao := dao.ProdutoDaoMap{}
+	//vendadao := dao.VendaDaoMap{}
+	//clientecontroller := ClienteDaoController{model: clientedao, view: view.ClienteView{}}
+	//produtocontroller := ClienteDaoController{model: clientedao, view: view.ClienteView{}}
 	for {
 		option := contrlr.view.OptionsMenu()
-		switch option{
+		switch option {
 		case view.OpçãoSair:
 			return nil
 		case view.OpçãoCliente:
-			//ClienteDaoController{model: 
+			//ClienteDaoController{model:
 			//clientedao
 			return nil
 		case view.OpçãoProduto:
