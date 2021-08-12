@@ -2,6 +2,8 @@ package dao
 
 import (
 	model "github.com/felipefrm/go-sistema-vendas/model"
+	"errors"
+	"fmt"
 )
 
 type ClienteDao interface {
@@ -19,26 +21,54 @@ type ClienteDaoMap struct {
 type ClienteIndexType = string
 
 func (dao ClienteDaoMap) Create(u *model.Cliente) error {
+	if u == nil{
+		err := erros.New("Cliente não válido.")
+		fmt.Print(err)
+		return err
+	}
 	dao.clientes[u.Rg] = *u
 	return nil
 }
 
 func (dao ClienteDaoMap) Update(i ClienteIndexType, u *model.Cliente) error {
+	if u == nil{
+		err := errors.New("Cliente não válido.")
+		fmt.Print(err)
+		return err
+	}else if i == nil{
+		err := errors.New("Indice não válido.")
+		fmt.Print(err)
+		return err
+	}
 	delete(dao.clientes, i)
 	dao.clientes[u.Rg] = *u
 	return nil
 }
 
 func (dao ClienteDaoMap) Delete(i ClienteIndexType) error {
+	if i == nil{
+		err := errors.New("Indice não válido.")
+		fmt.Print(err)
+		return err
+	}
 	delete(dao.clientes, i)
 	return nil
 }
 
 func (dao ClienteDaoMap) GetIndex(u *model.Cliente) (ClienteIndexType, error) {
+	if u == nil{
+		err := errors.New("Cliente não válido.")
+		fmt.Print(err)
+		return err
 	return u.Rg, nil
 }
 
 func (dao ClienteDaoMap) GetById(i ClienteIndexType) (model.Cliente, error) {
+	if i == nil{
+		err := errors.New("Indice não válido.")
+		fmt.Print(err)
+		return err
+	}
 	return dao.clientes[i], nil
 }
 
