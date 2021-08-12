@@ -44,11 +44,11 @@ func (v ClienteView) OptionsMenu() ClienteOption {
 	for {
 		fmt.Printf("\n[1] Visualizar Clientes\n[2] Adicionar Cliente\n[3] Alterar Cliente\n[4] Remover Cliente\n[0] Voltar\n>>> ")
 		_, err := fmt.Fscan(stdin, &opcao)
+		stdin.ReadString('\n')
 		if err == nil {
 			break
 		}
 		fmt.Print(err)
-		stdin.ReadString('\n')
 	}
 
 	return opcao
@@ -59,6 +59,7 @@ func (c ClienteView) Create() (ClienteViewForm, error) {
 	for {
 		fmt.Printf("\nNome: ")
 		_, err := fmt.Fscan(stdin, &form.Nome)
+		stdin.ReadString('\n')
 		if err != nil {
 			fmt.Print(err)
 		} else {
@@ -68,6 +69,7 @@ func (c ClienteView) Create() (ClienteViewForm, error) {
 	for {
 		fmt.Printf("Sobrenome: ")
 		_, err := fmt.Fscan(stdin, &form.Sobrenome)
+		stdin.ReadString('\n')
 		if err != nil {
 			fmt.Print(err)
 		} else {
@@ -77,6 +79,7 @@ func (c ClienteView) Create() (ClienteViewForm, error) {
 	for {
 		fmt.Printf("RG: ")
 		_, err := fmt.Fscan(stdin, &form.Rg)
+		stdin.ReadString('\n')
 		if err != nil {
 			fmt.Print(err)
 		} else {
@@ -86,6 +89,7 @@ func (c ClienteView) Create() (ClienteViewForm, error) {
 	for {
 		fmt.Printf("Data de nascimento: ")
 		_, err := fmt.Fscan(stdin, &form.Nascimento)
+		stdin.ReadString('\n')
 		if err != nil {
 			fmt.Print(err)
 		} else {
@@ -104,6 +108,7 @@ func (c ClienteView) RequestRg(clientes []ClienteViewForm) (string, error) {
 		c.VisualizeAll(clientes)
 		fmt.Printf("\n>>> ")
 		_, err := fmt.Fscan(stdin, &idCliente)
+		stdin.ReadString('\n')
 		if err != nil {
 			fmt.Print(err)
 		} else if len(idCliente) <= 0 {
@@ -111,7 +116,6 @@ func (c ClienteView) RequestRg(clientes []ClienteViewForm) (string, error) {
 		} else {
 			break
 		}
-		stdin.ReadString('\n')
 	}
 	//form.Rg = idCliente
 	return idCliente, nil
@@ -124,6 +128,7 @@ func (c ClienteView) Update(cliente ClienteViewForm) (ClienteViewForm, error) {
 		fmt.Printf("\nIndique a informação que deseja alterar:\n")
 		fmt.Printf("\n[1] Nome\n[2] Sobrenome\n[3] RG\n[4] Data de nascimento\n[0] Voltar\n>>> ")
 		_, err := fmt.Fscan(stdin, &opcao)
+		stdin.ReadString('\n')
 		if err != nil {
 			fmt.Print(err)
 		} else {
@@ -132,7 +137,7 @@ func (c ClienteView) Update(cliente ClienteViewForm) (ClienteViewForm, error) {
 			}
 			for {
 				fmt.Printf("\nIndique a nova informação a ser inserida: ")
-				fmt.Scanln(&novodado)
+				fmt.Fscan(stdin, &novodado)
 				if len(novodado) > 0 {
 					break
 				}

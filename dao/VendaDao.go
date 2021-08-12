@@ -15,23 +15,21 @@ type VendaDao interface {
 	GetAll() ([]model.Venda, error)
 }
 
-type VendaDaoMap struct {
-	vendas map[VendaIndexType]model.Venda
-}
+type VendaDaoMap map[VendaIndexType]model.Venda
 
 func (dao VendaDaoMap) Create(u *model.Venda) error {
-	dao.vendas[u.Numero] = *u
+	dao[u.Numero] = *u
 	return nil
 }
 
 func (dao VendaDaoMap) Update(i VendaIndexType, u *model.Venda) error {
-	delete(dao.vendas, i)
-	dao.vendas[u.Numero] = *u
+	delete(dao, i)
+	dao[u.Numero] = *u
 	return nil
 }
 
 func (dao VendaDaoMap) Delete(i VendaIndexType) error {
-	delete(dao.vendas, i)
+	delete(dao, i)
 	return nil
 }
 
@@ -40,13 +38,13 @@ func (dao VendaDaoMap) GetIndex(u *model.Venda) (VendaIndexType, error) {
 }
 
 func (dao VendaDaoMap) GetById(i VendaIndexType) (model.Venda, error) {
-	return dao.vendas[i], nil
+	return dao[i], nil
 }
 
 func (dao VendaDaoMap) GetAll() ([]model.Venda, error) {
-	v := make([]model.Venda, 0, len(dao.vendas))
+	v := make([]model.Venda, 0, len(dao))
 
-	for _, value := range dao.vendas {
+	for _, value := range dao {
 		v = append(v, value)
 	}
 	return v, nil

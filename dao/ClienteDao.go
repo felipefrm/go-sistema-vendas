@@ -14,16 +14,15 @@ type ClienteDao interface {
 	GetAll() ([]model.Cliente, error)
 }
 
-type ClienteDaoMap struct {
-	clientes map[ClienteIndexType]model.Cliente
-}
+type ClienteDaoMap map[ClienteIndexType]model.Cliente
+
 type ClienteIndexType = string
 
 func (dao ClienteDaoMap) Create(u *model.Cliente) error {
 	if u == nil{
 		return errors.Wrap(error, "Cliente não válido.")
 	}
-	dao.clientes[u.Rg] = *u
+	dao[u.Rg] = *u
 	return nil
 }
 
@@ -33,8 +32,8 @@ func (dao ClienteDaoMap) Update(i ClienteIndexType, u *model.Cliente) error {
 	}else if i == nil{
 		return errors.Wrap(error, "Indice não válido.")
 	}
-	delete(dao.clientes, i)
-	dao.clientes[u.Rg] = *u
+	delete(dao, i)
+	dao[u.Rg] = *u
 	return nil
 }
 
@@ -42,7 +41,7 @@ func (dao ClienteDaoMap) Delete(i ClienteIndexType) error {
 	if i == nil{
 		return errors.Wrap(error, "Indice não válido.")
 	}
-	delete(dao.clientes, i)
+	delete(dao, i)
 	return nil
 }
 
@@ -57,13 +56,13 @@ func (dao ClienteDaoMap) GetById(i ClienteIndexType) (model.Cliente, error) {
 	if i == nil{
 		return errors.Wrap(error, "Indice não válido.")
 	}
-	return dao.clientes[i], nil
+	return dao[i], nil
 }
 
 func (dao ClienteDaoMap) GetAll() ([]model.Cliente, error) {
-	v := make([]model.Cliente, 0, len(dao.clientes))
+	v := make([]model.Cliente, 0, len(dao))
 
-	for _, value := range dao.clientes {
+	for _, value := range dao {
 		v = append(v, value)
 	}
 	return v, nil
