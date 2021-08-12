@@ -15,23 +15,21 @@ type ProdutoDao interface {
 	GetAll() ([]model.Produto, error)
 }
 
-type ProdutoDaoMap struct {
-	produtos map[ProdutoIndexType]model.Produto
-}
+type ProdutoDaoMap map[ProdutoIndexType]model.Produto
 
 func (dao ProdutoDaoMap) Create(u *model.Produto) error {
-	dao.produtos[u.Codigo] = *u
+	dao[u.Codigo] = *u
 	return nil
 }
 
 func (dao ProdutoDaoMap) Update(i ProdutoIndexType, u *model.Produto) error {
-	delete(dao.produtos, i)
-	dao.produtos[u.Codigo] = *u
+	delete(dao, i)
+	dao[u.Codigo] = *u
 	return nil
 }
 
 func (dao ProdutoDaoMap) Delete(i ProdutoIndexType) error {
-	delete(dao.produtos, i)
+	delete(dao, i)
 	return nil
 }
 
@@ -40,13 +38,13 @@ func (dao ProdutoDaoMap) GetIndex(u *model.Produto) (ProdutoIndexType, error) {
 }
 
 func (dao ProdutoDaoMap) GetById(i ProdutoIndexType) (model.Produto, error) {
-	return dao.produtos[i], nil
+	return dao[i], nil
 }
 
 func (dao ProdutoDaoMap) GetAll() ([]model.Produto, error) {
-	v := make([]model.Produto, 0, len(dao.produtos))
+	v := make([]model.Produto, 0, len(dao))
 
-	for _, value := range dao.produtos {
+	for _, value := range dao {
 		v = append(v, value)
 	}
 	return v, nil
