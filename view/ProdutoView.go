@@ -50,7 +50,7 @@ func (c ProdutoView) Create() (ProdutoViewForm, error) {
 func (c ProdutoView) RequestCodigo(produtos []ProdutoViewForm) (int, error) {
 	var idProduto int
 	for {
-		fmt.Printf("\nIndique o ID do produto que deseja alterar os dados:\n")
+		fmt.Printf("\nIndique o ID do produto: [Digite -1 para finalizar inserção de produtos]\n")
 		c.VisualizeAll(produtos)
 		fmt.Printf("\n>>> ")
 		_, err := fmt.Fscan(stdin, &idProduto)

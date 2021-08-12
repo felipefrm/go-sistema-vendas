@@ -72,13 +72,15 @@ func (c ClienteView) RequestRg(clientes []ClienteViewForm) (string, error) {
 	//var form ClienteViewForm
 	var idCliente string
 	for {
-		fmt.Printf("\nIndique o RG do cliente que deseja alterar os dados: [Digite -1 para voltar]\n")
+		fmt.Printf("\nIndique o RG do cliente:\n")
 		//c.VisualizarClientes()
 		c.VisualizeAll(clientes)
 		fmt.Printf("\n>>> ")
 		_, err := fmt.Fscan(stdin, &idCliente)
 		if err != nil {
 			fmt.Print(err)
+		} else if len(idCliente) <= 0 {
+			continue
 		} else {
 			break
 		}

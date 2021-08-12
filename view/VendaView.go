@@ -34,8 +34,20 @@ func (c VendaView) Create(clientesform []ClienteViewForm, produtosform []Produto
 	for {
 		produtoId, _ := c.produtoview.RequestCodigo(produtosform)
 
-		fmt.Printf("\nInforme a quantidade:\n")
-		fmt.Scanln(&qtd)
+		if produtoId == -1 {
+			break
+		}
+
+		for {
+			fmt.Printf("\nInforme a quantidade:\n")
+			_, err := fmt.Fscan(stdin, &qtd)
+			if err != nil {
+				fmt.Print(err)
+			} else {
+				break
+			}
+			stdin.ReadString('\n')
+		}
 
 		itens = append(itens, ItemVendaViewForm{Produto: ProdutoViewForm{Codigo: produtoId}, Qtd: qtd})
 	}
@@ -47,38 +59,90 @@ func (c VendaView) Create(clientesform []ClienteViewForm, produtosform []Produto
 func (vv VendaView) RequestNumero(vendas []VendaViewForm) (int, error) {
 	//var form VendaViewForm
 	var idVenda int
-	fmt.Printf("\nIndique o número da venda que deseja remover:\n")
-	vv.VisualizeAll(vendas)
-	fmt.Printf("\n>>> ")
-	fmt.Fscan(stdin, &idVenda)
+	for {
+		fmt.Printf("\nIndique o número da venda que deseja remover:\n")
+		vv.VisualizeAll(vendas)
+		fmt.Printf("\n>>> ")
+		_, err := fmt.Fscan(stdin, &idVenda)
+		if err != nil {
+			fmt.Print(err)
+		} else {
+			break
+		}
+		stdin.ReadString('\n')
+	}
 	return idVenda, nil
 }
 
-func (vv VendaView) Update(venda VendaViewForm) (VendaViewForm, error) {
+func (vv VendaView) Update(venda VendaViewForm, clientes []ClienteViewForm, produtos []ProdutoViewForm) (VendaViewForm, error) {
 
 	var opcao int
 
 	for {
-		opcao = -1
-		fmt.Printf("\nIndique a informação que deseja alterar:\n")
-		fmt.Printf("\n[1] Número\n[2] Data\n[3] Cliente\n[4] Itens\n[0] Voltar\n>>> ")
-		fmt.Scanln(&opcao)
+		for {
+			opcao = -1
+			fmt.Printf("\nIndique a informação que deseja alterar:\n")
+			fmt.Printf("\n[1] Número\n[2] Data\n[3] Cliente\n[4] Itens\n[0] Voltar\n>>> ")
+			_, err := fmt.Fscan(stdin, &opcao)
+			if err != nil {
+				fmt.Print(err)
+			} else {
+				break
+			}
+			stdin.ReadString('\n')
+		}
 		if opcao == 0 {
 			break
 		} else if opcao == 1 {
-			fmt.Printf("\nIndique o novo número da venda: ")
 			var novodado int
-			fmt.Scanln(&novodado)
+			for {
+				fmt.Printf("\nIndique o novo número da venda: ")
+				_, err := fmt.Fscan(stdin, &novodado)
+				if err != nil {
+					fmt.Print(err)
+				} else {
+					break
+				}
+				stdin.ReadString('\n')
+			}
 			venda.Numero = novodado
 		} else if opcao == 2 {
-			fmt.Printf("\nIndique a nova data da venda: ")
 			var novodado string
-			fmt.Scanln(&novodado)
+			for {
+				fmt.Printf("\nIndique a nova data da venda: ")
+				_, err := fmt.Fscan(stdin, &novodado)
+				if err != nil {
+					fmt.Print(err)
+				} else {
+					break
+				}
+				stdin.ReadString('\n')
+			}
 			venda.Data = novodado
 		} else if opcao == 3 {
-			// troca de cliente
+			clienteId, _ := vv.clienteview.RequestRg(clientes)
+			venda.Cliente.Rg = clienteId
 		} else if opcao == 4 {
-			// remove, adiciona, modifica itens
+			// fmt.Printf("\n[1] Adicionar item\n[2] Remover item\n[3] Alterar item\n[0] Voltar\n>>> ")
+			// switch opcao {
+			// case 0:
+			// 	continue
+			// case 1:
+			// 	produtoId, _ := vv.produtoview.RequestCodigo(produtos)
+			// 	if produtoId == -1 {
+			// 		break
+			// 	}
+			// 	var qtd int
+			// 	fmt.Printf("\nInforme a quantidade:\n")
+			// 	fmt.Scanln(&qtd)
+			// 	venda.Itens = append(venda.Itens, ItemVendaViewForm{Produto: ProdutoViewForm{Codigo: produtoId}, Qtd: qtd})
+			// case 2:
+			// 	// remove
+			// case 3:
+			// 	//  modifica
+			// }
+		} else {
+			fmt.Println("Digite uma opção válida.")
 		}
 	}
 	return venda, nil
