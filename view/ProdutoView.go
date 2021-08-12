@@ -23,9 +23,9 @@ const (
 	OpçãoRemoverProduto
 )
 
-func (v ProdutoView) OptionsMenu() VendaOption {
+func (v ProdutoView) OptionsMenu() ProdutoOption {
 
-	var opcao VendaOption
+	var opcao ProdutoOption
 
 	for {
 		fmt.Printf("\n[1] Visualizar Produtos\n[2] Adicionar Produto\n[3] Alterar Produto\n[4] Remover Produto\n[0] Voltar\n>>> ")
