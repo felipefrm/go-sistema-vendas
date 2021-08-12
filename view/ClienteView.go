@@ -27,6 +27,33 @@ type ClienteViewForm struct {
 	Nascimento string
 }
 
+type ClienteOption int
+
+const (
+	OpçãoSairCliente ClienteOption = iota
+	OpçãoVerClientes
+	OpçãoAdicionarCliente
+	OpçãoAlterarCliente
+	OpçãoRemoverCliente
+)
+
+func (v ClienteView) OptionsMenu() ClienteOption {
+
+	var opcao ClienteOption
+
+	for {
+		fmt.Printf("\n[1] Visualizar Clientes\n[2] Adicionar Cliente\n[3] Alterar Cliente\n[4] Remover Cliente\n[0] Voltar\n>>> ")
+		_, err := fmt.Fscan(stdin, &opcao)
+		if err == nil {
+			break
+		}
+		fmt.Print(err)
+		stdin.ReadString('\n')
+	}
+
+	return opcao
+}
+
 func (c ClienteView) Create() (ClienteViewForm, error) {
 	var form ClienteViewForm
 	for {

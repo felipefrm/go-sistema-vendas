@@ -1,6 +1,9 @@
 package view
 
+import "fmt"
+
 type MainOption int
+
 const (
 	OpçãoSair MainOption = iota
 	OpçãoCliente
@@ -8,12 +11,22 @@ const (
 	OpçãoVenda
 )
 
-
-type MainView struct{
-
+type MainView struct {
 }
 
-func (c MainView) OptionsMenu() MainOption{
-	// TODO
-	return OpçãoSair
+func (v MainView) OptionsMenu() MainOption {
+
+	var opcao MainOption
+
+	for {
+		fmt.Printf("\n[1] Gerenciar Clientes\n[2] Gerenciar Produtos\n[3] Gerenciar Vendas\n[0] Sair\n>>> ")
+		_, err := fmt.Fscan(stdin, &opcao)
+		if err == nil {
+			break
+		}
+		fmt.Print(err)
+		stdin.ReadString('\n')
+	}
+
+	return opcao
 }

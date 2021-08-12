@@ -13,6 +13,33 @@ type ProdutoViewForm struct {
 	Valor  float32
 }
 
+type ProdutoOption int
+
+const (
+	OpçãoSairProduto ProdutoOption = iota
+	OpçãoVerProdutos
+	OpçãoAdicionarProduto
+	OpçãoAlterarProduto
+	OpçãoRemoverProduto
+)
+
+func (v ProdutoView) OptionsMenu() VendaOption {
+
+	var opcao VendaOption
+
+	for {
+		fmt.Printf("\n[1] Visualizar Produtos\n[2] Adicionar Produto\n[3] Alterar Produto\n[4] Remover Produto\n[0] Voltar\n>>> ")
+		_, err := fmt.Fscan(stdin, &opcao)
+		if err == nil {
+			break
+		}
+		fmt.Print(err)
+		stdin.ReadString('\n')
+	}
+
+	return opcao
+}
+
 func (c ProdutoView) Create() (ProdutoViewForm, error) {
 	var form ProdutoViewForm
 

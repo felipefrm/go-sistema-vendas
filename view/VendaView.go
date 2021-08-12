@@ -23,6 +23,33 @@ type VendaViewForm struct {
 	Itens   []ItemVendaViewForm
 }
 
+type VendaOption int
+
+const (
+	OpçãoSairVenda VendaOption = iota
+	OpçãoVerVendas
+	OpçãoAdicionarVenda
+	OpçãoAlterarVenda
+	OpçãoRemoverVenda
+)
+
+func (v VendaView) OptionsMenu() VendaOption {
+
+	var opcao VendaOption
+
+	for {
+		fmt.Printf("\n[1] Visualizar Vendas\n[2] Adicionar Venda\n[3] Alterar Venda\n[4] Remover Venda\n[0] Voltar\n>>> ")
+		_, err := fmt.Fscan(stdin, &opcao)
+		if err == nil {
+			break
+		}
+		fmt.Print(err)
+		stdin.ReadString('\n')
+	}
+
+	return opcao
+}
+
 func (c VendaView) Create(clientesform []ClienteViewForm, produtosform []ProdutoViewForm) (VendaViewForm, error) {
 	data := time.Now().Format("01-02-2006")
 	//var produtoId, qtd int
@@ -60,7 +87,7 @@ func (vv VendaView) RequestNumero(vendas []VendaViewForm) (int, error) {
 	//var form VendaViewForm
 	var idVenda int
 	for {
-		fmt.Printf("\nIndique o número da venda que deseja remover:\n")
+		fmt.Printf("\nIndique o número da venda:\n")
 		vv.VisualizeAll(vendas)
 		fmt.Printf("\n>>> ")
 		_, err := fmt.Fscan(stdin, &idVenda)
@@ -137,22 +164,24 @@ func (vv VendaView) Update(venda VendaViewForm, clientes []ClienteViewForm, prod
 				if opcao == 0 {
 					break
 				} else if opcao == 1 {
-					produtoId, _ := vv.produtoview.RequestCodigo(produtos)
-					if produtoId == -1 {
-						break
-					}
-					var qtd int
 					for {
-						fmt.Printf("\nInforme a quantidade:\n")
-						_, err := fmt.Fscan(stdin, &qtd)
-						if err != nil {
-							fmt.Print(err)
-						} else {
+						produtoId, _ := vv.produtoview.RequestCodigo(produtos)
+						if produtoId == -1 {
 							break
 						}
-						stdin.ReadString('\n')
+						var qtd int
+						for {
+							fmt.Printf("\nInforme a quantidade:\n")
+							_, err := fmt.Fscan(stdin, &qtd)
+							if err != nil {
+								fmt.Print(err)
+							} else {
+								break
+							}
+							stdin.ReadString('\n')
+						}
+						venda.Itens = append(venda.Itens, ItemVendaViewForm{Produto: ProdutoViewForm{Codigo: produtoId}, Qtd: qtd})
 					}
-					venda.Itens = append(venda.Itens, ItemVendaViewForm{Produto: ProdutoViewForm{Codigo: produtoId}, Qtd: qtd})
 				} else if opcao == 2 {
 					// remove
 				} else if opcao == 3 {
