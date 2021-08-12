@@ -21,11 +21,11 @@ func (v MainView) OptionsMenu() MainOption {
 	for {
 		fmt.Printf("\n[1] Gerenciar Clientes\n[2] Gerenciar Produtos\n[3] Gerenciar Vendas\n[0] Sair\n>>> ")
 		_, err := fmt.Fscan(stdin, &opcao)
+		stdin.ReadString('\n')
 		if err == nil {
 			break
 		}
 		fmt.Print(err)
-		stdin.ReadString('\n')
 	}
 
 	return opcao
