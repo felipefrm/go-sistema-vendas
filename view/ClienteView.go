@@ -99,10 +99,15 @@ func (c ClienteView) Update(cliente ClienteViewForm) (ClienteViewForm, error) {
 			fmt.Print(err)
 		} else {
 			if opcao == 0 {
-				return cliente, nil
+				break
 			}
-			fmt.Printf("\nIndique a nova informação a ser inserida: ")
-			fmt.Scanln(&novodado)
+			for {
+				fmt.Printf("\nIndique a nova informação a ser inserida: ")
+				fmt.Scanln(&novodado)
+				if len(novodado) > 0 {
+					break
+				}
+			}
 			switch opcao {
 			case 1:
 				cliente.Nome = novodado
@@ -117,6 +122,7 @@ func (c ClienteView) Update(cliente ClienteViewForm) (ClienteViewForm, error) {
 			}
 		}
 	}
+	return cliente, nil
 }
 
 func (c ClienteView) Visualize(form ClienteViewForm) error {

@@ -15,51 +15,110 @@ type ProdutoViewForm struct {
 
 func (c ProdutoView) Create() (ProdutoViewForm, error) {
 	var form ProdutoViewForm
-	fmt.Printf("Código: ")
-	fmt.Scanf("%d\n", &form.Codigo)
-	fmt.Printf("\nNome: ")
-	fmt.Scanf("%s\n", &form.Nome)
-	fmt.Printf("Valor unitário: ")
-	fmt.Scanf("%f\n", &form.Valor)
+
+	for {
+		fmt.Printf("\nCódigo: ")
+		_, err := fmt.Fscan(stdin, &form.Codigo)
+		if err != nil {
+			fmt.Print(err)
+		} else {
+			break
+		}
+	}
+	for {
+		fmt.Printf("Nome: ")
+		_, err := fmt.Fscan(stdin, &form.Nome)
+		if err != nil {
+			fmt.Print(err)
+		} else {
+			break
+		}
+	}
+	for {
+		fmt.Printf("Valor unitário: ")
+		_, err := fmt.Fscan(stdin, &form.Valor)
+		if err != nil {
+			fmt.Print(err)
+		} else {
+			break
+		}
+	}
+
 	return form, nil
 }
 
 func (c ProdutoView) RequestCodigo(produtos []ProdutoViewForm) (int, error) {
 	var idProduto int
-	fmt.Printf("\nIndique o ID do produto que deseja alterar os dados:\n")
-	c.VisualizeAll(produtos)
-	fmt.Printf("\n>>> ")
-	fmt.Scanln(&idProduto)
+	for {
+		fmt.Printf("\nIndique o ID do produto que deseja alterar os dados:\n")
+		c.VisualizeAll(produtos)
+		fmt.Printf("\n>>> ")
+		_, err := fmt.Fscan(stdin, &idProduto)
+		if err != nil {
+			fmt.Print(err)
+		} else {
+			break
+		}
+	}
 
 	return idProduto, nil
 }
 
 func (c ProdutoView) Update(produto ProdutoViewForm) (ProdutoViewForm, error) {
-	//var novodado string
+
 	var opcao int
 
 	for {
 		opcao = -1
 		fmt.Printf("\nIndique a informação que deseja alterar:\n")
 		fmt.Printf("\n[1] Código\n[2] Nome\n[3] Valor unitário\n[0] Voltar\n>>> ")
-		fmt.Scanln(&opcao)
-		if opcao == 0 {
-			break
-		}
-		fmt.Printf("\nIndique a nova informação a ser inserida: ")
-		switch opcao {
-		case 1:
-			var novodado int
-			fmt.Scanln(&novodado)
-			produto.Codigo = novodado
-		case 2:
-			var novodado string
-			fmt.Scanln(&novodado)
-			produto.Nome = novodado
-		case 3:
-			var novodado float32
-			fmt.Scanln(&novodado)
-			produto.Valor = novodado
+		_, err := fmt.Fscan(stdin, &opcao)
+		if err != nil {
+			fmt.Print(err)
+		} else {
+			if opcao == 0 {
+				break
+			}
+			fmt.Printf("\nIndique a nova informação a ser inserida: ")
+			switch opcao {
+			case 1:
+				var novodado int
+				for {
+					_, err := fmt.Fscan(stdin, &novodado)
+					if err != nil {
+						fmt.Print(err)
+					} else {
+						break
+					}
+				}
+				produto.Codigo = novodado
+			case 2:
+				var novodado string
+				for {
+					_, err := fmt.Fscan(stdin, &novodado)
+					if err != nil {
+						fmt.Print(err)
+					} else if len(novodado) <= 0 {
+						continue
+					} else {
+						break
+					}
+				}
+				produto.Nome = novodado
+			case 3:
+				var novodado float32
+				for {
+					_, err := fmt.Fscan(stdin, &novodado)
+					if err != nil {
+						fmt.Print(err)
+					} else {
+						break
+					}
+				}
+				produto.Valor = novodado
+			default:
+				fmt.Println("Digite uma opção válida.")
+			}
 		}
 	}
 	return produto, nil
