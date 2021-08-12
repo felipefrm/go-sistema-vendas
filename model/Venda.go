@@ -2,9 +2,9 @@ package model
 
 type Venda struct {
 	Numero  int
-	data    string
-	cliente Cliente
-	itens   []ItemVenda
+	Data    string
+	Cliente Cliente
+	Itens   []ItemVenda
 }
 
 func (venda Venda) total() float32 {

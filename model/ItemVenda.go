@@ -1,11 +1,11 @@
 package model
 
 type ItemVenda struct {
-	produto Produto
-	valor   float32
-	qtd     int
+	Produto Produto
+	Valor   float32
+	Qtd     int
 }
 
 func (item ItemVenda) total() float32 {
-	return item.valor * float32(item.qtd)
+	return item.Valor * float32(item.Qtd)
 }
