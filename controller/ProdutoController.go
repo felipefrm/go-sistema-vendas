@@ -12,47 +12,47 @@ type ProdutoDaoController struct {
 }
 
 func ProdutoViewFormToProduto(f view.ProdutoViewForm) model.Produto {
-	return model.Produto{Pessoa: model.Pessoa{Nome: f.Nome, Sobrenome: f.Sobrenome}, Codigo: f.Codigo, Nascimento: f.Nascimento}
+	return model.Produto{Codigo: f.Codigo, Nome: f.Nome, Valor: f.Valor}
 }
 
-func ProdutoToProdutoViewForm(c model.Produto) view.ProdutoViewForm {
+func ProdutoToProdutoViewForm(produto model.Produto) view.ProdutoViewForm {
 	return view.ProdutoViewForm{
-		Nome:       c.Nome,
-		Sobrenome:  c.Sobrenome,
-		Codigo:     c.Codigo,
-		Nascimento: c.Nascimento,
+		Codigo: produto.Codigo,
+		Nome:   produto.Nome,
+		Valor:  produto.Valor,
 	}
 }
 
 func (contrlr ProdutoDaoController) Create() error {
-	var f view.ProdutoViewForm = contrlr.view.Create()
-	c := ProdutoViewFormToProduto(f)
-	contrlr.model.Create(&c)
+	var f view.ProdutoViewForm
+	f, _ = contrlr.view.Create()
+	produto := ProdutoViewFormToProduto(f)
+	contrlr.model.Create(&produto)
 	return nil
 }
 
-func (contrlr ProdutoDaoController) RequestCODIGO() (int, error) {
+func (contrlr ProdutoDaoController) RequestCodigo() (int, error) {
 	produtos, _ := contrlr.model.GetAll()
 	var forms []view.ProdutoViewForm
 	for _, x := range produtos {
 		forms = append(forms, ProdutoToProdutoViewForm(x))
 	}
-	Codigo := contrlr.view.RequestCODIGO(forms)
-	return Codigo, nil
+	codigo, _ := contrlr.view.RequestCodigo(forms)
+	return codigo, nil
 }
 func (contrlr ProdutoDaoController) Update() error {
-	Codigo, _ := contrlr.RequestCODIGO()
-	produto, _ := contrlr.model.GetById(Codigo)
+	codigo, _ := contrlr.RequestCodigo()
+	produto, _ := contrlr.model.GetById(codigo)
 	form := ProdutoToProdutoViewForm(produto)
 	outform, _ := contrlr.view.Update(form)
 	outproduto := ProdutoViewFormToProduto(outform)
-	contrlr.model.Update(Codigo, &outproduto)
+	contrlr.model.Update(codigo, &outproduto)
 	return nil
 }
 
 func (contrlr ProdutoDaoController) Delete() error {
-	Codigo, _ := contrlr.RequestCODIGO()
-	produto, _ := contrlr.model.GetById(Codigo)
+	codigo, _ := contrlr.RequestCodigo()
+	produto, _ := contrlr.model.GetById(codigo)
 	i, _ := contrlr.model.GetIndex(&produto)
 	contrlr.model.Delete(i)
 	return nil

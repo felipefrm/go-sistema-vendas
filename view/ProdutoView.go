@@ -24,7 +24,7 @@ func (c ProdutoView) Create() (ProdutoViewForm, error) {
 	return form, nil
 }
 
-func (c ProdutoView) RequestRG(produtos []ProdutoViewForm) (int, error) {
+func (c ProdutoView) RequestCodigo(produtos []ProdutoViewForm) (int, error) {
 	var idProduto int
 	fmt.Printf("\nIndique o ID do produto que deseja alterar os dados:\n")
 	c.VisualizeAll(produtos)

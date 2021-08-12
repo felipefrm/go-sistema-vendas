@@ -38,7 +38,7 @@ func (contrlr ClienteDaoController) RequestRG() (string, error) {
 	for _, x := range clientes {
 		forms = append(forms, ClienteToClienteViewForm(x))
 	}
-	rg, _ := contrlr.view.RequestRG(forms)
+	rg, _ := contrlr.view.RequestRg(forms)
 	return rg, nil
 }
 func (contrlr ClienteDaoController) Update() error {

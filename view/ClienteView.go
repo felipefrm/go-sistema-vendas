@@ -68,7 +68,7 @@ func (c ClienteView) Create() (ClienteViewForm, error) {
 	return form, nil
 }
 
-func (c ClienteView) RequestRG(clientes []ClienteViewForm) (string, error) {
+func (c ClienteView) RequestRg(clientes []ClienteViewForm) (string, error) {
 	//var form ClienteViewForm
 	var idCliente string
 	for {
