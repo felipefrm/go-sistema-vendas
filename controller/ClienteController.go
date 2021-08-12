@@ -68,3 +68,22 @@ func (contrlr ClienteDaoController) ListAll() error {
 	contrlr.view.VisualizeAll(forms)
 	return nil
 }
+
+func (contrlr ClienteDaoController) OptionsMenu() error {
+	for {
+		option := contrlr.view.OptionsMenu()
+		switch option {
+		case view.OpçãoSairCliente:
+			return nil
+		case view.OpçãoVerClientes:
+			contrlr.ListAll()
+		case view.OpçãoAdicionarCliente:
+			contrlr.Create()
+		case view.OpçãoAlterarCliente:
+			contrlr.Update()
+		case view.OpçãoRemoverCliente:
+			contrlr.Delete()
+		}
+	}
+	return nil
+}

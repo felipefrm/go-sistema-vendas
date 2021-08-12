@@ -103,3 +103,22 @@ func (contrlr VendaDaoController) ListAll() error {
 	contrlr.view.VisualizeAll(forms)
 	return nil
 }
+
+func (contrlr VendaDaoController) OptionsMenu() error {
+	for {
+		option := contrlr.view.OptionsMenu()
+		switch option {
+		case view.OpçãoSairVenda:
+			return nil
+		case view.OpçãoVerVendas:
+			contrlr.ListAll()
+		case view.OpçãoAdicionarVenda:
+			contrlr.Create()
+		case view.OpçãoAlterarVenda:
+			contrlr.Update()
+		case view.OpçãoRemoverVenda:
+			contrlr.Delete()
+		}
+	}
+	return nil
+}

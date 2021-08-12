@@ -67,3 +67,22 @@ func (contrlr ProdutoDaoController) ListAll() error {
 	contrlr.view.VisualizeAll(forms)
 	return nil
 }
+
+func (contrlr ProdutoDaoController) OptionsMenu() error {
+	for {
+		option := contrlr.view.OptionsMenu()
+		switch option {
+		case view.OpçãoSairProduto:
+			return nil
+		case view.OpçãoVerProdutos:
+			contrlr.ListAll()
+		case view.OpçãoAdicionarProduto:
+			contrlr.Create()
+		case view.OpçãoAlterarProduto:
+			contrlr.Update()
+		case view.OpçãoRemoverProduto:
+			contrlr.Delete()
+		}
+	}
+	return nil
+}

@@ -23,11 +23,11 @@ func (contrlr MainDaoController) OptionsMenu() error {
 		case view.OpçãoSair:
 			return nil
 		case view.OpçãoCliente:
-			return nil
+			clientecontroller.OptionsMenu()
 		case view.OpçãoProduto:
-			return nil
+			produtocontroller.OptionsMenu()
 		case view.OpçãoVenda:
-			return nil
+			vendacontroller.OptionsMenu()
 		}
 	}
 	return nil
