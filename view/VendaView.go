@@ -55,8 +55,33 @@ func (vv VendaView) RequestNumero(vendas []VendaViewForm) (int, error) {
 }
 
 func (vv VendaView) Update(venda VendaViewForm) (VendaViewForm, error) {
-	var novodado string
+
 	var opcao int
+
+	for {
+		opcao = -1
+		fmt.Printf("\nIndique a informação que deseja alterar:\n")
+		fmt.Printf("\n[1] Número\n[2] Data\n[3] Cliente\n[4] Itens\n[0] Voltar\n>>> ")
+		fmt.Scanln(&opcao)
+		if opcao == 0 {
+			break
+		} else if opcao == 1 {
+			fmt.Printf("\nIndique o novo número da venda: ")
+			var novodado int
+			fmt.Scanln(&novodado)
+			venda.Numero = novodado
+		} else if opcao == 2 {
+			fmt.Printf("\nIndique a nova data da venda: ")
+			var novodado string
+			fmt.Scanln(&novodado)
+			venda.Data = novodado
+		} else if opcao == 3 {
+			// troca de cliente
+		} else if opcao == 4 {
+			// remove, adiciona, modifica itens
+		}
+	}
+	return venda, nil
 }
 
 func (vv VendaView) Visualize(form VendaViewForm) error {
