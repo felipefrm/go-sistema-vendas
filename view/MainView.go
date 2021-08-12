@@ -14,7 +14,7 @@ type MainView struct{
 
 }
 
-func (c MainView) Menu() MainOption{
+func (c MainView) OptionsMenu() MainOption{
 	// TODO
 	return OpçãoSair
 }

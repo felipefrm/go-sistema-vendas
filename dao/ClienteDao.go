@@ -13,18 +13,18 @@ type ClienteDao interface{
 }
 
 type ClienteDaoMap struct{
-	clientes map[string]model.Cliente
+	clientes map[ClienteIndexType]model.Cliente
 }
 type ClienteIndexType = string
 
 func (dao ClienteDaoMap) Create(u *model.Cliente) error{
-	dao.clientes[u.Rg()] = *u
+	dao.clientes[u.Rg] = *u
 	return nil
 }
 
 func (dao ClienteDaoMap) Update(i ClienteIndexType, u *model.Cliente) error{
 	delete(dao.clientes,i)
-	dao.clientes[u.Rg()] = *u
+	dao.clientes[u.Rg] = *u
 	return nil
 }
 
@@ -34,7 +34,7 @@ func (dao ClienteDaoMap) Delete(i ClienteIndexType) error{
 }
 
 func (dao ClienteDaoMap) GetIndex(u *model.Cliente) ClienteIndexType{
-	return u.Rg()
+	return u.Rg
 }
 
 func (dao ClienteDaoMap) GetById(i ClienteIndexType) (model.Cliente, error){
