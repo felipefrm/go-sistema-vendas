@@ -6,7 +6,7 @@ import (
 )
 
 type MainDaoController struct {
-	view view.MainView
+	View view.MainView
 }
 
 func (contrlr MainDaoController) OptionsMenu() error {
@@ -18,7 +18,7 @@ func (contrlr MainDaoController) OptionsMenu() error {
 	vendacontroller := VendaDaoController{vendamodel: vendadao, clientemodel: clientedao, produtomodel: produtodao, view: view.VendaView{}}
 
 	for {
-		option := contrlr.view.OptionsMenu()
+		option := contrlr.View.OptionsMenu()
 		switch option {
 		case view.OpçãoSair:
 			return nil
