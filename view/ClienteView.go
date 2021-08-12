@@ -79,10 +79,6 @@ func (c ClienteView) RequestRg(clientes []ClienteViewForm) (string, error) {
 		_, err := fmt.Fscan(stdin, &idCliente)
 		if err != nil {
 			fmt.Print(err)
-			//} else if idCliente < 0 {
-			//return
-			//} else if len(clientes) == 0 || idCliente >= len(clientes) {
-			//fmt.Println("Digite um RG válido.")
 		} else {
 			break
 		}

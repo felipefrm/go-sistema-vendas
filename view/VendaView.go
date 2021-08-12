@@ -44,9 +44,13 @@ func (c VendaView) Create(clientesform []ClienteViewForm, produtosform []Produto
 	return resultform, nil
 }
 
-func (vv VendaView) RequestNumero(vendas []VendaViewForm) (string, error) {
+func (vv VendaView) RequestNumero(vendas []VendaViewForm) (int, error) {
 	//var form VendaViewForm
-	var idVenda string
+	var idVenda int
+	fmt.Printf("\nIndique o número da venda que deseja remover:\n")
+	vv.VisualizeAll(vendas)
+	fmt.Printf("\n>>> ")
+	fmt.Fscan(stdin, &idVenda)
 	return idVenda, nil
 }
 
@@ -56,7 +60,6 @@ func (vv VendaView) Update(venda VendaViewForm) (VendaViewForm, error) {
 }
 
 func (vv VendaView) Visualize(form VendaViewForm) error {
-	//fmt.Printf("%s\t%s\t%s\t%s\n", form.Nome, form.Sobrenome, form.Numero, form.Nascimento)
 	fmt.Printf("%d\t%s\t%s\t%v\n", form.Numero, form.Data, form.Cliente.Nome, form.Itens)
 	return nil
 }
