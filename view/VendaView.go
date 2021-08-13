@@ -123,7 +123,7 @@ func (vv VendaView) Update(venda VendaViewForm, clientes []ClienteViewForm, prod
 		for {
 			opcao = -1
 			fmt.Printf("\nIndique a informação que deseja alterar:\n")
-			fmt.Printf("\n[1] Número\n[2] Data\n[3] Cliente\n[4] Itens\n[0] Voltar\n>>> ")
+			fmt.Printf("\n[1] Número\n[2] Data\n[3] Cliente\n[0] Voltar\n>>> ")
 			_, err := fmt.Fscan(stdin, &opcao)
 			stdin.ReadString('\n')
 			if err != nil {
@@ -163,47 +163,6 @@ func (vv VendaView) Update(venda VendaViewForm, clientes []ClienteViewForm, prod
 		} else if opcao == 3 {
 			clienteId, _ := vv.clienteview.RequestRg(clientes)
 			venda.Cliente.Rg = clienteId
-		} else if opcao == 4 {
-			for {
-				for {
-					fmt.Printf("\n[1] Adicionar item\n[2] Remover item\n[3] Alterar item\n[0] Voltar\n>>> ")
-					_, err := fmt.Fscan(stdin, &opcao)
-					stdin.ReadString('\n')
-					if err != nil {
-						fmt.Print(err)
-					} else {
-						break
-					}
-				}
-				if opcao == 0 {
-					break
-				} else if opcao == 1 {
-					for {
-						produtoId, _ := vv.produtoview.RequestCodigo(produtos)
-						if produtoId == -1 {
-							break
-						}
-						var qtd int
-						for {
-							fmt.Printf("\nInforme a quantidade:\n")
-							_, err := fmt.Fscan(stdin, &qtd)
-							stdin.ReadString('\n')
-							if err != nil {
-								fmt.Print(err)
-							} else {
-								break
-							}
-						}
-						venda.Itens = append(venda.Itens, ItemVendaViewForm{Produto: ProdutoViewForm{Codigo: produtoId}, Qtd: qtd})
-					}
-				} else if opcao == 2 {
-					// remove
-				} else if opcao == 3 {
-					// modifica
-				} else {
-					fmt.Println("Digite uma opção válida.")
-				}
-			}
 		} else {
 			fmt.Println("Digite uma opção válida.")
 		}
