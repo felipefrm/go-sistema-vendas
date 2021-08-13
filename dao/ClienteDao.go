@@ -1,8 +1,9 @@
 package dao
 
 import (
+	lerror "github.com/felipefrm/go-sistema-vendas/lerror"
 	model "github.com/felipefrm/go-sistema-vendas/model"
-	errors "https://github.com/pkg/errors"
+	errors "github.com/pkg/errors"
 )
 
 type ClienteDao interface {
@@ -19,42 +20,47 @@ type ClienteDaoMap map[ClienteIndexType]model.Cliente
 type ClienteIndexType = string
 
 func (dao ClienteDaoMap) Create(u *model.Cliente) error {
-	if u == nil{
-		return errors.Wrap(error, "Cliente não válido.")
+	if u == nil {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente inválido.")
 	}
 	dao[u.Rg] = *u
 	return nil
 }
 
 func (dao ClienteDaoMap) Update(i ClienteIndexType, u *model.Cliente) error {
-	if u == nil{
-		return errors.Wrap(error, "Cliente não válido.")
-	}else if i == nil{
-		return errors.Wrap(error, "Indice não válido.")
+	if u == nil {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente inválido.")
+	} else if i == "" {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do cliente não é válido.")
+	} else if _, err := dao[i]; !err {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
 	}
+
 	delete(dao, i)
 	dao[u.Rg] = *u
 	return nil
 }
 
 func (dao ClienteDaoMap) Delete(i ClienteIndexType) error {
-	if i == nil{
-		return errors.Wrap(error, "Indice não válido.")
+	if _, err := dao[i]; !err {
+		return errors.Wrap(lerror.InvalidKeyError{}, "Cliente não encontrado.")
 	}
 	delete(dao, i)
 	return nil
 }
 
 func (dao ClienteDaoMap) GetIndex(u *model.Cliente) (ClienteIndexType, error) {
-	if u == nil{
-		return errors.Wrap(error, "Cliente não válido.")
+	if u == nil {
+		return "", errors.Wrap(&lerror.InvalidKeyError{}, "Cliente inválido.")
 	}
 	return u.Rg, nil
 }
 
 func (dao ClienteDaoMap) GetById(i ClienteIndexType) (model.Cliente, error) {
-	if i == nil{
-		return errors.Wrap(error, "Indice não válido.")
+	if i == "" {
+		return model.Cliente{}, errors.Wrap(&lerror.InvalidKeyError{}, "Cliente inválido.")
+	} else if _, err := dao[i]; !err {
+		return model.Cliente{}, errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
 	}
 	return dao[i], nil
 }

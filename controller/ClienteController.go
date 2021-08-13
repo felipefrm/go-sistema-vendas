@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"fmt"
+
 	dao "github.com/felipefrm/go-sistema-vendas/dao"
 	model "github.com/felipefrm/go-sistema-vendas/model"
 	view "github.com/felipefrm/go-sistema-vendas/view"
@@ -54,8 +56,12 @@ func (contrlr ClienteDaoController) Update() error {
 func (contrlr ClienteDaoController) Delete() error {
 	rg, _ := contrlr.RequestRG()
 	cliente, _ := contrlr.model.GetById(rg)
+	//fmt.Printf("%v", err)
 	i, _ := contrlr.model.GetIndex(&cliente)
-	contrlr.model.Delete(i)
+	err := contrlr.model.Delete(i)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+	}
 	return nil
 }
 
