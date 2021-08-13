@@ -39,7 +39,7 @@ func (dao ProdutoDaoMap) Update(i ProdutoIndexType, u *model.Produto) error {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do produto não é válido.")
 	} else if _, err := dao.Model[i]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto não encontrado.")
-	} else if _, err := dao.Model[(*u).Codigo]; err {
+	} else if _, err := dao.Model[(*u).Codigo]; (*u).Codigo != i && err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Código de produto já em uso.")
 	}
 

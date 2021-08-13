@@ -41,7 +41,7 @@ func (dao ClienteDaoMap) Update(i ClienteIndexType, u *model.Cliente) error {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do cliente não é válido.")
 	} else if _, err := dao.Model[i]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
-	} else if _, err := dao.Model[(*u).Rg]; err {
+	} else if _, err := dao.Model[(*u).Rg]; (*u).Rg != i && err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "RG já em uso.")
 	}
 

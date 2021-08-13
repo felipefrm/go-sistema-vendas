@@ -77,7 +77,7 @@ func (dao VendaDaoMap) Update(i VendaIndexType, u *model.Venda) error {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice da venda não é válido.")
 	} else if _, err := dao.Model[i]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda não encontrada.")
-	} else if _, err := dao.Model[(*u).Numero]; err {
+	} else if _, err := dao.Model[(*u).Numero]; (*u).Numero != i && err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Número de venda já em uso.")
 	}
 
