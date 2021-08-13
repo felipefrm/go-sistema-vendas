@@ -1,6 +1,6 @@
-# Sistemas de Vendas com Go
+# Sistema de Vendas com Go
 ## Descrição
-Trabalho prático de conceitos de linguagem de programação que visa demonstrar a utilização de conceitos de linguagem de programação com Go atráves da implementação de um sistema de vendas.
+Trabalho prático de Conceitos de Linguagem de Programação que visa demonstrar a utilização de conceitos de linguagem de programação com Go atráves da implementação de um sistema de vendas.
 
 ## Utilização
 
