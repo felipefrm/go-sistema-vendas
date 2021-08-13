@@ -21,7 +21,7 @@ func ItemVendaViewFormToItemVenda(itemvenda view.ItemVendaViewForm) model.ItemVe
 }
 
 func ItemVendaToItemVendaViewForm(itemvenda model.ItemVenda) view.ItemVendaViewForm {
-	return view.ItemVendaViewForm{Produto: ProdutoToProdutoViewForm(*itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
+	return view.ItemVendaViewForm{Produto: ProdutoToProdutoViewForm(*itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd, Total: itemvenda.Total()}
 }
 
 func VendaViewFormToVenda(venda view.VendaViewForm) model.Venda {
