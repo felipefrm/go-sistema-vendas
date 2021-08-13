@@ -30,7 +30,10 @@ func (contrlr ClienteDaoController) Create() error {
 	var f view.ClienteViewForm
 	f, _ = contrlr.view.Create()
 	cliente := ClienteViewFormToCliente(f)
-	contrlr.model.Create(&cliente)
+	if err := contrlr.model.Create(&cliente); err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	return nil
 }
 
@@ -45,21 +48,35 @@ func (contrlr ClienteDaoController) RequestRG() (string, error) {
 }
 func (contrlr ClienteDaoController) Update() error {
 	rg, _ := contrlr.RequestRG()
-	cliente, _ := contrlr.model.GetById(rg)
-	form := ClienteToClienteViewForm(cliente)
-	outform, _ := contrlr.view.Update(form)
-	outcliente := ClienteViewFormToCliente(outform)
-	contrlr.model.Update(rg, &outcliente)
-	return nil
+	cliente, err := contrlr.model.GetById(rg)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	} else {
+		form := ClienteToClienteViewForm(cliente)
+		outform, _ := contrlr.view.Update(form)
+		outcliente := ClienteViewFormToCliente(outform)
+		if err := contrlr.model.Update(rg, &outcliente); err != nil {
+			fmt.Printf("%v", err.Error())
+			return err
+		}
+		return nil
+	}
 }
 
 func (contrlr ClienteDaoController) Delete() error {
 	rg, _ := contrlr.RequestRG()
-	cliente, _ := contrlr.model.GetById(rg)
-	//fmt.Printf("%v", err)
-	i, _ := contrlr.model.GetIndex(&cliente)
-	err := contrlr.model.Delete(i)
+	cliente, err := contrlr.model.GetById(rg)
 	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
+	i, err := contrlr.model.GetIndex(&cliente)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
+	if err := contrlr.model.Delete(i); err != nil {
 		fmt.Printf("%v", err.Error())
 	}
 	return nil
@@ -91,5 +108,4 @@ func (contrlr ClienteDaoController) OptionsMenu() error {
 			contrlr.Delete()
 		}
 	}
-	return nil
 }
