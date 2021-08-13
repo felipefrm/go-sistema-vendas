@@ -80,7 +80,7 @@ func (c ProdutoView) Create() (ProdutoViewForm, error) {
 func (c ProdutoView) RequestCodigo(produtos []ProdutoViewForm) (int, error) {
 	var idProduto int
 	for {
-		fmt.Printf("\nIndique o ID do produto: [Digite -1 para finalizar inserção de produtos]\n")
+		fmt.Printf("\nIndique o número do produto:\n")
 		c.VisualizeAll(produtos)
 		fmt.Printf("\n>>> ")
 		_, err := fmt.Fscan(stdin, &idProduto)
@@ -160,13 +160,12 @@ func (c ProdutoView) Update(produto ProdutoViewForm) (ProdutoViewForm, error) {
 }
 
 func (c ProdutoView) Visualize(v ProdutoViewForm) error {
-	fmt.Printf("%d\t%s\t%f\n", v.Codigo, v.Nome, v.Valor)
+	fmt.Printf("(%d)\t%s\t%f\n", v.Codigo, v.Nome, v.Valor)
 	return nil
 }
 
 func (c ProdutoView) VisualizeAll(form []ProdutoViewForm) error {
-	for i, v := range form {
-		fmt.Printf("%d -", i+1)
+	for _, v := range form {
 		c.Visualize(v)
 	}
 	return nil

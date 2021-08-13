@@ -198,13 +198,12 @@ func (vv VendaView) Update(venda VendaViewForm, clientes []ClienteViewForm, prod
 }
 
 func (vv VendaView) Visualize(form VendaViewForm) error {
-	fmt.Printf("%d\t%s\t%s\t%v\n", form.Numero, form.Data, form.Cliente.Nome, form.Itens)
+	fmt.Printf("(%d)\t%s\t%s\t%v\n", form.Numero, form.Data, form.Cliente.Nome, form.Itens)
 	return nil
 }
 
 func (vv VendaView) VisualizeAll(form []VendaViewForm) error {
-	for i, v := range form {
-		fmt.Printf("%d -", i+1)
+	for _, v := range form {
 		vv.Visualize(v)
 	}
 	return nil

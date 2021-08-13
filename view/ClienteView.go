@@ -160,13 +160,12 @@ func (c ClienteView) Update(cliente ClienteViewForm) (ClienteViewForm, error) {
 }
 
 func (c ClienteView) Visualize(form ClienteViewForm) error {
-	fmt.Printf("%s\t%s\t%s\t%s\n", form.Nome, form.Sobrenome, form.Rg, form.Nascimento)
+	fmt.Printf("(%s)\t%s %s\t%s\n", form.Rg, form.Nome, form.Sobrenome, form.Nascimento)
 	return nil
 }
 
 func (c ClienteView) VisualizeAll(form []ClienteViewForm) error {
-	for i, v := range form {
-		fmt.Printf("%d -", i+1)
+	for _, v := range form {
 		c.Visualize(v)
 	}
 	return nil

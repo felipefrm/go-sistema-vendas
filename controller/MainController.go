@@ -22,17 +22,17 @@ func (contrlr MainDaoController) OptionsMenu() error {
 	produtodao.Create(&p2)
 	produtodao.Create(&p3)
 
-	c1 := model.Cliente{model.Pessoa{"João", "da Silva"}, "121241", "02/06/1999"}
-	c2 := model.Cliente{model.Pessoa{"José", "Lucas"}, "215122", "21/02/1982"}
-	c3 := model.Cliente{model.Pessoa{"Maria", "Joaquina"}, "2151225", "15/07/1987"}
+	c1 := model.Cliente{model.Pessoa{"João", "da Silva"}, "121241", "02-06-1999"}
+	c2 := model.Cliente{model.Pessoa{"José", "Lucas"}, "215122", "21-02-1982"}
+	c3 := model.Cliente{model.Pessoa{"Maria", "Joaquina"}, "2151225", "15-07-1987"}
 	clientedao.Create(&c1)
 	clientedao.Create(&c2)
 	clientedao.Create(&c3)
 
-	itens := [2]model.ItemVenda{model.ItemVenda{p1, 2.2, 5}, model.ItemVenda{p3, 4, 10}}
-	v1 := model.Venda{1, "12/08/2021", c1, itens[:]}
-	itens = [2]model.ItemVenda{model.ItemVenda{p2, 10, 1}, model.ItemVenda{p3, 4, 10}}
-	v2 := model.Venda{2, "12/08/2021", c2, itens[:]}
+	itens := [2]model.ItemVenda{model.ItemVenda{p1, 2.5, 5}, model.ItemVenda{p3, 5, 10}}
+	v1 := model.Venda{1, "12-08-2021", c1, itens[:]}
+	itens = [2]model.ItemVenda{model.ItemVenda{p2, 10.5, 1}, model.ItemVenda{p3, 5, 10}}
+	v2 := model.Venda{2, "12-08-2021", c2, itens[:]}
 	vendadao.Create(&v1)
 	vendadao.Create(&v2)
 
