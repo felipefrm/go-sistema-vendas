@@ -1,7 +1,7 @@
 package model
 
 type ItemVenda struct {
-	Produto Produto
+	Produto *Produto
 	Valor   float32
 	Qtd     int
 }

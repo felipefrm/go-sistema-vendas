@@ -16,11 +16,12 @@ type VendaDaoController struct {
 }
 
 func ItemVendaViewFormToItemVenda(itemvenda view.ItemVendaViewForm) model.ItemVenda {
-	return model.ItemVenda{Produto: ProdutoViewFormToProduto(itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
+	p := ProdutoViewFormToProduto(itemvenda.Produto)
+	return model.ItemVenda{Produto: &p, Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
 }
 
 func ItemVendaToItemVendaViewForm(itemvenda model.ItemVenda) view.ItemVendaViewForm {
-	return view.ItemVendaViewForm{Produto: ProdutoToProdutoViewForm(itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
+	return view.ItemVendaViewForm{Produto: ProdutoToProdutoViewForm(*itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
 }
 
 func VendaViewFormToVenda(venda view.VendaViewForm) model.Venda {
@@ -58,7 +59,13 @@ func (contrlr VendaDaoController) Create() error {
 	c, _ := contrlr.clientemodel.GetIndex(venda.Cliente)
 	ogclient, _ := contrlr.clientemodel.GetById(c)
 	venda.Cliente = &ogclient
-	//venda.Cliente =
+
+	for _, x := range venda.Itens {
+		prod, _ := contrlr.produtomodel.GetIndex(x.Produto)
+		ogprod, _ := contrlr.produtomodel.GetById(prod)
+		x.Produto = &ogprod
+	}
+
 	if err := contrlr.vendamodel.Create(&venda); err != nil {
 		fmt.Printf("%v", err.Error())
 		return err

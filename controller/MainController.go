@@ -32,9 +32,9 @@ func (contrlr MainDaoController) OptionsMenu() error {
 	produtodao.Create(&p2)
 	produtodao.Create(&p3)
 
-	itens := [2]model.ItemVenda{{p1, 2.5, 5}, {p3, 5, 10}}
+	itens := [2]model.ItemVenda{{&p1, 2.5, 5}, {&p3, 5, 10}}
 	v1 := model.Venda{1, "12-08-2021", &c1, itens[:]}
-	itens = [2]model.ItemVenda{{p2, 10.5, 1}, {p3, 5, 10}}
+	itens = [2]model.ItemVenda{{&p2, 10.5, 1}, {&p3, 5, 10}}
 	v2 := model.Venda{2, "12-08-2021", &c2, itens[:]}
 	vendadao.Create(&v1)
 	vendadao.Create(&v2)
