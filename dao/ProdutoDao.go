@@ -1,8 +1,8 @@
 package dao
 
 import (
-	model "github.com/felipefrm/go-sistema-vendas/model"
 	lerror "github.com/felipefrm/go-sistema-vendas/lerror"
+	model "github.com/felipefrm/go-sistema-vendas/model"
 	errors "github.com/pkg/errors"
 )
 
@@ -23,10 +23,11 @@ type ProdutoDaoMap struct {
 }
 
 func (dao ProdutoDaoMap) Create(u *model.Produto) error {
-	if u == nil{
+	if u == nil {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
+	} else if _, err := dao.Model[(*u).Codigo]; err {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Código de produto já em uso.")
 	}
-	
 	dao.Model[u.Codigo] = *u
 	return nil
 }
@@ -34,10 +35,12 @@ func (dao ProdutoDaoMap) Create(u *model.Produto) error {
 func (dao ProdutoDaoMap) Update(i ProdutoIndexType, u *model.Produto) error {
 	if u == nil {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
-	} else if i == "" {
+	} else if i < 0 {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do produto não é válido.")
 	} else if _, err := dao.Model[i]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto não encontrado.")
+	} else if _, err := dao.Model[(*u).Codigo]; err {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Código de produto já em uso.")
 	}
 
 	newindex, _ := dao.GetIndex(u)
@@ -61,17 +64,17 @@ func (dao ProdutoDaoMap) Delete(i ProdutoIndexType) error {
 
 func (dao ProdutoDaoMap) GetIndex(u *model.Produto) (ProdutoIndexType, error) {
 	if u == nil {
-		return "", errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
+		return -1, errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
 	}
 
 	return u.Codigo, nil
 }
 
 func (dao ProdutoDaoMap) GetById(i ProdutoIndexType) (model.Produto, error) {
-	if i == "" {
-		return model.Cliente{}, errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
+	if i < 0 {
+		return model.Produto{}, errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
 	} else if _, err := dao.Model[i]; !err {
-		return model.Cliente{}, errors.Wrap(&lerror.InvalidKeyError{}, "Produto não encontrado.")
+		return model.Produto{}, errors.Wrap(&lerror.InvalidKeyError{}, "Produto não encontrado.")
 	}
 
 	return dao.Model[i], nil

@@ -1,8 +1,8 @@
 package dao
 
 import (
-	model "github.com/felipefrm/go-sistema-vendas/model"
 	lerror "github.com/felipefrm/go-sistema-vendas/lerror"
+	model "github.com/felipefrm/go-sistema-vendas/model"
 	errors "github.com/pkg/errors"
 )
 
@@ -24,13 +24,9 @@ type VendaDaoMap struct {
 }
 
 func (dao VendaDaoMap) InsertClientesVendasNumero(i ClienteIndexType, j VendaIndexType, value bool) error {
-	if i == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente inválido.")
-	} else if i == "" {
+	if i == "" {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do cliente não é válido.")
-	} else if j == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.") 
-	}else if j == "" {
+	} else if j < 0 {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice de venda não é válido.")
 	}
 
@@ -42,13 +38,9 @@ func (dao VendaDaoMap) InsertClientesVendasNumero(i ClienteIndexType, j VendaInd
 }
 
 func (dao VendaDaoMap) InsertProdutosVendasNumero(i ProdutoIndexType, j VendaIndexType, value bool) error {
-	if i == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente inválido.")
-	} else if i == "" {
+	if i < 0 {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do cliente não é válido.")
-	} else if j == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.") 
-	}else if j == "" {
+	} else if j < 0 {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice de venda não é válido.")
 	}
 
@@ -60,8 +52,10 @@ func (dao VendaDaoMap) InsertProdutosVendasNumero(i ProdutoIndexType, j VendaInd
 }
 
 func (dao VendaDaoMap) Create(u *model.Venda) error {
-	if u == nil{
+	if u == nil {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
+	} else if _, err := dao.Model[(*u).Numero]; err {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Número de venda já em uso.")
 	}
 
 	dao.Model[u.Numero] = *u
@@ -79,10 +73,12 @@ func (dao VendaDaoMap) Create(u *model.Venda) error {
 func (dao VendaDaoMap) Update(i VendaIndexType, u *model.Venda) error {
 	if u == nil {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
-	} else if i == "" {
+	} else if i < 0 {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice da venda não é válido.")
 	} else if _, err := dao.Model[i]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda não encontrada.")
+	} else if _, err := dao.Model[(*u).Numero]; err {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Número de venda já em uso.")
 	}
 
 	i2, _ := dao.GetIndex(u)
@@ -112,17 +108,17 @@ func (dao VendaDaoMap) Delete(i VendaIndexType) error {
 
 func (dao VendaDaoMap) GetIndex(u *model.Venda) (VendaIndexType, error) {
 	if u == nil {
-		return "", errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
+		return -1, errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
 	}
 
 	return u.Numero, nil
 }
 
 func (dao VendaDaoMap) GetById(i VendaIndexType) (model.Venda, error) {
-	if i == "" {
-		return model.Cliente{}, errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
+	if i < 0 {
+		return model.Venda{}, errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
 	} else if _, err := dao.Model[i]; !err {
-		return model.Cliente{}, errors.Wrap(&lerror.InvalidKeyError{}, "Venda não encontrada.")
+		return model.Venda{}, errors.Wrap(&lerror.InvalidKeyError{}, "Venda não encontrada.")
 	}
 
 	return dao.Model[i], nil
@@ -140,7 +136,7 @@ func (dao VendaDaoMap) GetAll() ([]model.Venda, error) {
 func (dao VendaDaoMap) ClienteRemove(i ClienteIndexType) error {
 	if i == "" {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do cliente não é válido.")
-	} else if _, err := dao.Model[i]; !err {
+	} else if _, err := dao.ClientesVendasNumero[i]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
 	}
 
@@ -152,9 +148,9 @@ func (dao VendaDaoMap) ClienteRemove(i ClienteIndexType) error {
 func (dao VendaDaoMap) UpdateClienteKey(ckey ClienteIndexType, newkey ClienteIndexType) error {
 	if ckey == "" {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do cliente não é válido.")
-	} else if _, err := dao.Model[ckey]; !err {
+	} else if _, err := dao.ClientesVendasNumero[ckey]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
-	}else if _, err := dao.Model[newkey]; !err {
+	} else if _, err := dao.ClientesVendasNumero[newkey]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Key já em uso.")
 	}
 
@@ -166,7 +162,7 @@ func (dao VendaDaoMap) UpdateClienteKey(ckey ClienteIndexType, newkey ClienteInd
 }
 
 func (dao VendaDaoMap) ProdutoRemove(i ProdutoIndexType) error {
-	if i == "" {
+	if i < 0 {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do produto não é válido.")
 	} else if _, err := dao.Model[i]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto não encontrado.")
@@ -179,11 +175,11 @@ func (dao VendaDaoMap) ProdutoRemove(i ProdutoIndexType) error {
 }
 
 func (dao VendaDaoMap) UpdateProdutoKey(ckey ProdutoIndexType, newkey ProdutoIndexType) error {
-	if ckey == "" {
+	if ckey < 0 {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do produto não é válido.")
 	} else if _, err := dao.Model[ckey]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto não encontrado.")
-	}else if _, err := dao.Model[newkey]; !err {
+	} else if _, err := dao.Model[newkey]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Key já em uso.")
 	}
 

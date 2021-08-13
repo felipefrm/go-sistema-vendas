@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"fmt"
+
 	dao "github.com/felipefrm/go-sistema-vendas/dao"
 	model "github.com/felipefrm/go-sistema-vendas/model"
 	view "github.com/felipefrm/go-sistema-vendas/view"
-	lerror "github.com/felipefrm/go-sistema-vendas/lerror"
-	errors "github.com/pkg/errors"
 )
 
 type VendaDaoController struct {
@@ -16,26 +16,14 @@ type VendaDaoController struct {
 }
 
 func ItemVendaViewFormToItemVenda(itemvenda view.ItemVendaViewForm) model.ItemVenda {
-	if itemvenda == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Item inválido.")
-	}
-
 	return model.ItemVenda{Produto: ProdutoViewFormToProduto(itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
 }
 
 func ItemVendaToItemVendaViewForm(itemvenda model.ItemVenda) view.ItemVendaViewForm {
-	if itemvenda == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Item inválido.")
-	}
-
 	return view.ItemVendaViewForm{Produto: ProdutoToProdutoViewForm(itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
 }
 
 func VendaViewFormToVenda(venda view.VendaViewForm) model.Venda {
-	if venda == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
-	}
-
 	var itens []model.ItemVenda
 	for _, x := range venda.Itens {
 		itens = append(itens, ItemVendaViewFormToItemVenda(x))
@@ -45,10 +33,6 @@ func VendaViewFormToVenda(venda view.VendaViewForm) model.Venda {
 }
 
 func VendaToVendaViewForm(venda model.Venda) view.VendaViewForm {
-	if venda == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
-	}
-
 	var itensforms []view.ItemVendaViewForm
 	for _, x := range venda.Itens {
 		itensforms = append(itensforms, ItemVendaToItemVendaViewForm(x))
@@ -71,7 +55,10 @@ func (contrlr VendaDaoController) Create() error {
 	}
 	f, _ = contrlr.view.Create(clientesforms, produtosforms)
 	venda := VendaViewFormToVenda(f)
-	contrlr.vendamodel.Create(&venda)
+	if err := contrlr.vendamodel.Create(&venda); err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	return nil
 }
 
@@ -97,19 +84,37 @@ func (contrlr VendaDaoController) Update() error {
 	}
 
 	numero, _ := contrlr.RequestNumero()
-	venda, _ := contrlr.vendamodel.GetById(numero)
+	venda, err := contrlr.vendamodel.GetById(numero)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	form := VendaToVendaViewForm(venda)
 	outform, _ := contrlr.view.Update(form, clientesforms, produtosforms)
 	outvenda := VendaViewFormToVenda(outform)
-	contrlr.vendamodel.Update(numero, &outvenda)
+	if err := contrlr.vendamodel.Update(numero, &outvenda); err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	return nil
 }
 
 func (contrlr VendaDaoController) Delete() error {
 	numero, _ := contrlr.RequestNumero()
-	venda, _ := contrlr.vendamodel.GetById(numero)
-	i, _ := contrlr.vendamodel.GetIndex(&venda)
-	contrlr.vendamodel.Delete(i)
+	venda, err := contrlr.vendamodel.GetById(numero)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
+	i, err := contrlr.vendamodel.GetIndex(&venda)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
+	if err := contrlr.vendamodel.Delete(i); err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	return nil
 }
 
@@ -139,5 +144,4 @@ func (contrlr VendaDaoController) OptionsMenu() error {
 			contrlr.Delete()
 		}
 	}
-	return nil
 }

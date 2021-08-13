@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"fmt"
+
 	dao "github.com/felipefrm/go-sistema-vendas/dao"
 	model "github.com/felipefrm/go-sistema-vendas/model"
 	view "github.com/felipefrm/go-sistema-vendas/view"
-	lerror "github.com/felipefrm/go-sistema-vendas/lerror"
-	errors "github.com/pkg/errors"
 )
 
 type ProdutoDaoController struct {
@@ -14,18 +14,10 @@ type ProdutoDaoController struct {
 }
 
 func ProdutoViewFormToProduto(f view.ProdutoViewForm) model.Produto {
-	if f == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
-	}
-
 	return model.Produto{Codigo: f.Codigo, Nome: f.Nome, Valor: f.Valor}
 }
 
 func ProdutoToProdutoViewForm(produto model.Produto) view.ProdutoViewForm {
-	if produto == nil {
-		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
-	}
-	
 	return view.ProdutoViewForm{
 		Codigo: produto.Codigo,
 		Nome:   produto.Nome,
@@ -37,7 +29,10 @@ func (contrlr ProdutoDaoController) Create() error {
 	var f view.ProdutoViewForm
 	f, _ = contrlr.view.Create()
 	produto := ProdutoViewFormToProduto(f)
-	contrlr.model.Create(&produto)
+	if err := contrlr.model.Create(&produto); err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	return nil
 }
 
@@ -52,19 +47,37 @@ func (contrlr ProdutoDaoController) RequestCodigo() (int, error) {
 }
 func (contrlr ProdutoDaoController) Update() error {
 	codigo, _ := contrlr.RequestCodigo()
-	produto, _ := contrlr.model.GetById(codigo)
+	produto, err := contrlr.model.GetById(codigo)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	form := ProdutoToProdutoViewForm(produto)
 	outform, _ := contrlr.view.Update(form)
 	outproduto := ProdutoViewFormToProduto(outform)
-	contrlr.model.Update(codigo, &outproduto)
+	if err := contrlr.model.Update(codigo, &outproduto); err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	return nil
 }
 
 func (contrlr ProdutoDaoController) Delete() error {
 	codigo, _ := contrlr.RequestCodigo()
-	produto, _ := contrlr.model.GetById(codigo)
-	i, _ := contrlr.model.GetIndex(&produto)
-	contrlr.model.Delete(i)
+	produto, err := contrlr.model.GetById(codigo)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
+	i, err := contrlr.model.GetIndex(&produto)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
+	if err := contrlr.model.Delete(i); err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	return nil
 }
 
@@ -94,5 +107,4 @@ func (contrlr ProdutoDaoController) OptionsMenu() error {
 			contrlr.Delete()
 		}
 	}
-	return nil
 }

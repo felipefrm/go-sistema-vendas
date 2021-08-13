@@ -25,6 +25,8 @@ type ClienteIndexType = string
 func (dao ClienteDaoMap) Create(u *model.Cliente) error {
 	if u == nil {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente inválido.")
+	} else if _, err := dao.Model[(*u).Rg]; err {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "RG já em uso.")
 	}
 	//fmt.Printf("%s", *u)
 	//dao.Model = make(map[ClienteIndexType]model.Cliente)
@@ -39,6 +41,8 @@ func (dao ClienteDaoMap) Update(i ClienteIndexType, u *model.Cliente) error {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Indice do cliente não é válido.")
 	} else if _, err := dao.Model[i]; !err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
+	} else if _, err := dao.Model[(*u).Rg]; err {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "RG já em uso.")
 	}
 
 	newindex, _ := dao.GetIndex(u)
