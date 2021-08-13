@@ -14,6 +14,7 @@ type ItemVendaViewForm struct {
 	Produto ProdutoViewForm
 	Valor   float32
 	Qtd     int
+	Total   float32
 }
 
 type VendaViewForm struct {
@@ -21,6 +22,7 @@ type VendaViewForm struct {
 	Data    string
 	Cliente ClienteViewForm
 	Itens   []ItemVendaViewForm
+	//total   float32
 }
 
 type VendaOption int

@@ -6,6 +6,6 @@ type ItemVenda struct {
 	Qtd     int
 }
 
-func (item ItemVenda) total() float32 {
+func (item ItemVenda) Total() float32 {
 	return item.Valor * float32(item.Qtd)
 }

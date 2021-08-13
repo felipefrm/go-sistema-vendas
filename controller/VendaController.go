@@ -21,7 +21,7 @@ func ItemVendaViewFormToItemVenda(itemvenda view.ItemVendaViewForm) model.ItemVe
 }
 
 func ItemVendaToItemVendaViewForm(itemvenda model.ItemVenda) view.ItemVendaViewForm {
-	return view.ItemVendaViewForm{Produto: ProdutoToProdutoViewForm(*itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
+	return view.ItemVendaViewForm{Produto: ProdutoToProdutoViewForm(*itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd, Total: itemvenda.Total()}
 }
 
 func VendaViewFormToVenda(venda view.VendaViewForm) model.Venda {
@@ -60,10 +60,10 @@ func (contrlr VendaDaoController) Create() error {
 	ogclient, _ := contrlr.clientemodel.GetById(c)
 	venda.Cliente = &ogclient
 
-	for _, x := range venda.Itens {
+	for i, x := range venda.Itens {
 		prod, _ := contrlr.produtomodel.GetIndex(x.Produto)
 		ogprod, _ := contrlr.produtomodel.GetById(prod)
-		x.Produto = &ogprod
+		venda.Itens[i].Produto = &ogprod
 	}
 
 	if err := contrlr.vendamodel.Create(&venda); err != nil {
