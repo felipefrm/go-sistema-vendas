@@ -55,6 +55,10 @@ func (contrlr VendaDaoController) Create() error {
 	}
 	f, _ = contrlr.view.Create(clientesforms, produtosforms)
 	venda := VendaViewFormToVenda(f)
+	c, _ := contrlr.clientemodel.GetIndex(venda.Cliente)
+	ogclient, _ := contrlr.clientemodel.GetById(c)
+	venda.Cliente = &ogclient
+	//venda.Cliente =
 	if err := contrlr.vendamodel.Create(&venda); err != nil {
 		fmt.Printf("%v", err.Error())
 		return err
