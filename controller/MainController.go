@@ -11,16 +11,12 @@ type MainDaoController struct {
 }
 
 func (contrlr MainDaoController) OptionsMenu() error {
-	clientedao := dao.ClienteDaoMap{}
-	produtodao := dao.ProdutoDaoMap{}
-	vendadao := dao.VendaDaoMap{}
+	vendadao := dao.VendaDaoMap{Model: make(map[dao.VendaIndexType]model.Venda), ClientesVendasNumero: make(map[dao.ClienteIndexType]map[dao.VendaIndexType]bool),
 
-	p1 := model.Produto{Codigo: 1, Nome: "Biscoito", Valor: 2.5}
-	p2 := model.Produto{Codigo: 2, Nome: "Pó de Café", Valor: 10.5}
-	p3 := model.Produto{Codigo: 3, Nome: "Xícara", Valor: 5}
-	produtodao.Create(&p1)
-	produtodao.Create(&p2)
-	produtodao.Create(&p3)
+		ProdutosVendasNumero: make(map[dao.ProdutoIndexType]map[dao.VendaIndexType]bool)}
+	clientedao := dao.ClienteDaoMap{Model: make(map[dao.ClienteIndexType]model.Cliente), Vendadaomap: &vendadao}
+	//clientedao.Init()
+	produtodao := dao.ProdutoDaoMap{Model: make(map[dao.ProdutoIndexType]model.Produto), Vendadaomap: &vendadao}
 
 	c1 := model.Cliente{model.Pessoa{"João", "da Silva"}, "121241", "02-06-1999"}
 	c2 := model.Cliente{model.Pessoa{"José", "Lucas"}, "215122", "21-02-1982"}
@@ -29,10 +25,17 @@ func (contrlr MainDaoController) OptionsMenu() error {
 	clientedao.Create(&c2)
 	clientedao.Create(&c3)
 
+	p1 := model.Produto{Codigo: 1, Nome: "Biscoito", Valor: 2.5}
+	p2 := model.Produto{Codigo: 2, Nome: "Pó de Café", Valor: 10.5}
+	p3 := model.Produto{Codigo: 3, Nome: "Xícara", Valor: 5}
+	produtodao.Create(&p1)
+	produtodao.Create(&p2)
+	produtodao.Create(&p3)
+
 	itens := [2]model.ItemVenda{model.ItemVenda{p1, 2.5, 5}, model.ItemVenda{p3, 5, 10}}
-	v1 := model.Venda{1, "12-08-2021", c1, itens[:]}
+	v1 := model.Venda{1, "12-08-2021", &c1, itens[:]}
 	itens = [2]model.ItemVenda{model.ItemVenda{p2, 10.5, 1}, model.ItemVenda{p3, 5, 10}}
-	v2 := model.Venda{2, "12-08-2021", c2, itens[:]}
+	v2 := model.Venda{2, "12-08-2021", &c2, itens[:]}
 	vendadao.Create(&v1)
 	vendadao.Create(&v2)
 

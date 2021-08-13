@@ -26,7 +26,8 @@ func VendaViewFormToVenda(venda view.VendaViewForm) model.Venda {
 	for _, x := range venda.Itens {
 		itens = append(itens, ItemVendaViewFormToItemVenda(x))
 	}
-	return model.Venda{Numero: venda.Numero, Data: venda.Data, Cliente: ClienteViewFormToCliente(venda.Cliente), Itens: itens}
+	cliente := ClienteViewFormToCliente(venda.Cliente)
+	return model.Venda{Numero: venda.Numero, Data: venda.Data, Cliente: &cliente, Itens: itens}
 }
 
 func VendaToVendaViewForm(venda model.Venda) view.VendaViewForm {
@@ -34,7 +35,7 @@ func VendaToVendaViewForm(venda model.Venda) view.VendaViewForm {
 	for _, x := range venda.Itens {
 		itensforms = append(itensforms, ItemVendaToItemVendaViewForm(x))
 	}
-	return view.VendaViewForm{Numero: venda.Numero, Data: venda.Data, Cliente: ClienteToClienteViewForm(venda.Cliente), Itens: itensforms}
+	return view.VendaViewForm{Numero: venda.Numero, Data: venda.Data, Cliente: ClienteToClienteViewForm(*venda.Cliente), Itens: itensforms}
 }
 
 func (contrlr VendaDaoController) Create() error {

@@ -3,7 +3,7 @@ package model
 type Venda struct {
 	Numero  int
 	Data    string
-	Cliente Cliente
+	Cliente *Cliente
 	Itens   []ItemVenda
 }
 
