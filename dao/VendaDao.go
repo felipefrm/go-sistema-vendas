@@ -95,10 +95,25 @@ func (dao VendaDaoMap) ClienteRemove(i ClienteIndexType) error {
 	}
 	return nil
 }
+func (dao VendaDaoMap) UpdateClienteKey(ckey ClienteIndexType, newkey ClienteIndexType) error {
+	for idx := range dao.ClientesVendasNumero[ckey] {
+		delete(dao.ClientesVendasNumero[ckey], idx)
+		dao.InsertClientesVendasNumero(newkey, idx, true)
+	}
+	return nil
+}
 
 func (dao VendaDaoMap) ProdutoRemove(i ProdutoIndexType) error {
 	for idx := range dao.ProdutosVendasNumero[i] {
 		dao.Delete(idx)
+	}
+	return nil
+}
+
+func (dao VendaDaoMap) UpdateProdutoKey(ckey ProdutoIndexType, newkey ProdutoIndexType) error {
+	for idx := range dao.ProdutosVendasNumero[ckey] {
+		delete(dao.ProdutosVendasNumero[ckey], idx)
+		dao.InsertProdutosVendasNumero(newkey, idx, true)
 	}
 	return nil
 }

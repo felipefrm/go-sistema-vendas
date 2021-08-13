@@ -41,7 +41,10 @@ func (dao ClienteDaoMap) Update(i ClienteIndexType, u *model.Cliente) error {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
 	}
 
-	//delete(dao.model, i)
+	newindex, _ := dao.GetIndex(u)
+	if newindex != i {
+		dao.Vendadaomap.UpdateClienteKey(i, newindex)
+	}
 	dao.Delete(i)
 	dao.Model[u.Rg] = *u
 	return nil

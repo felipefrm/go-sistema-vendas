@@ -26,6 +26,10 @@ func (dao ProdutoDaoMap) Create(u *model.Produto) error {
 }
 
 func (dao ProdutoDaoMap) Update(i ProdutoIndexType, u *model.Produto) error {
+	newindex, _ := dao.GetIndex(u)
+	if newindex != i {
+		dao.Vendadaomap.UpdateProdutoKey(i, newindex)
+	}
 	dao.Delete(i)
 	dao.Model[u.Codigo] = *u
 	return nil
