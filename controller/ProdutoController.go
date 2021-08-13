@@ -40,7 +40,7 @@ func (contrlr ProdutoDaoController) RequestCodigo() (int, error) {
 	produtos, _ := contrlr.model.GetAll()
 	var forms []view.ProdutoViewForm
 	for _, x := range produtos {
-		forms = append(forms, ProdutoToProdutoViewForm(x))
+		forms = append(forms, ProdutoToProdutoViewForm(*x))
 	}
 	codigo, _ := contrlr.view.RequestCodigo(forms)
 	return codigo, nil
@@ -52,7 +52,7 @@ func (contrlr ProdutoDaoController) Update() error {
 		fmt.Printf("%v", err.Error())
 		return err
 	}
-	form := ProdutoToProdutoViewForm(produto)
+	form := ProdutoToProdutoViewForm(*produto)
 	outform, _ := contrlr.view.Update(form)
 	outproduto := ProdutoViewFormToProduto(outform)
 	if err := contrlr.model.Update(codigo, &outproduto); err != nil {
@@ -69,7 +69,7 @@ func (contrlr ProdutoDaoController) Delete() error {
 		fmt.Printf("%v", err.Error())
 		return err
 	}
-	i, err := contrlr.model.GetIndex(&produto)
+	i, err := contrlr.model.GetIndex(produto)
 	if err != nil {
 		fmt.Printf("%v", err.Error())
 		return err
@@ -85,7 +85,7 @@ func (contrlr ProdutoDaoController) ListAll() error {
 	produtos, _ := contrlr.model.GetAll()
 	var forms []view.ProdutoViewForm
 	for _, x := range produtos {
-		forms = append(forms, ProdutoToProdutoViewForm(x))
+		forms = append(forms, ProdutoToProdutoViewForm(*x))
 	}
 	contrlr.view.VisualizeAll(forms)
 	return nil

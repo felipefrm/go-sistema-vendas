@@ -14,9 +14,9 @@ func (contrlr MainDaoController) OptionsMenu() error {
 	vendadao := dao.VendaDaoMap{Model: make(map[dao.VendaIndexType]model.Venda), ClientesVendasNumero: make(map[dao.ClienteIndexType]map[dao.VendaIndexType]bool),
 
 		ProdutosVendasNumero: make(map[dao.ProdutoIndexType]map[dao.VendaIndexType]bool)}
-	clientedao := dao.ClienteDaoMap{Model: make(map[dao.ClienteIndexType]model.Cliente), Vendadaomap: &vendadao}
+	clientedao := dao.ClienteDaoMap{Model: make(map[dao.ClienteIndexType]*model.Cliente), Vendadaomap: &vendadao}
 	//clientedao.Init()
-	produtodao := dao.ProdutoDaoMap{Model: make(map[dao.ProdutoIndexType]model.Produto), Vendadaomap: &vendadao}
+	produtodao := dao.ProdutoDaoMap{Model: make(map[dao.ProdutoIndexType]*model.Produto), Vendadaomap: &vendadao}
 
 	c1 := model.Cliente{model.Pessoa{"João", "da Silva"}, "121241", "02-06-1999"}
 	c2 := model.Cliente{model.Pessoa{"José", "Lucas"}, "215122", "21-02-1982"}

@@ -46,13 +46,13 @@ func (contrlr VendaDaoController) Create() error {
 	clientes, _ := contrlr.clientemodel.GetAll()
 	var clientesforms []view.ClienteViewForm
 	for _, x := range clientes {
-		clientesforms = append(clientesforms, ClienteToClienteViewForm(x))
+		clientesforms = append(clientesforms, ClienteToClienteViewForm(*x))
 	}
 
 	produtos, _ := contrlr.produtomodel.GetAll()
 	var produtosforms []view.ProdutoViewForm
 	for _, x := range produtos {
-		produtosforms = append(produtosforms, ProdutoToProdutoViewForm(x))
+		produtosforms = append(produtosforms, ProdutoToProdutoViewForm(*x))
 	}
 	f, _ = contrlr.view.Create(clientesforms, produtosforms)
 	venda := VendaViewFormToVenda(f)
@@ -62,11 +62,12 @@ func (contrlr VendaDaoController) Create() error {
 		return err
 	}
 	ogclient, err := contrlr.clientemodel.GetById(c)
+
 	if err != nil {
 		fmt.Printf("%v", err.Error())
 		return err
 	}
-	venda.Cliente = &ogclient
+	venda.Cliente = ogclient
 
 	for i, x := range venda.Itens {
 		prod, err := contrlr.produtomodel.GetIndex(x.Produto)
@@ -79,7 +80,7 @@ func (contrlr VendaDaoController) Create() error {
 			fmt.Printf("%v", err.Error())
 			return err
 		}
-		venda.Itens[i].Produto = &ogprod
+		venda.Itens[i].Produto = ogprod
 	}
 
 	if err := contrlr.vendamodel.Create(&venda); err != nil {
@@ -102,12 +103,12 @@ func (contrlr VendaDaoController) Update() error {
 	clientes, _ := contrlr.clientemodel.GetAll()
 	var clientesforms []view.ClienteViewForm
 	for _, x := range clientes {
-		clientesforms = append(clientesforms, ClienteToClienteViewForm(x))
+		clientesforms = append(clientesforms, ClienteToClienteViewForm(*x))
 	}
 	produtos, _ := contrlr.produtomodel.GetAll()
 	var produtosforms []view.ProdutoViewForm
 	for _, x := range produtos {
-		produtosforms = append(produtosforms, ProdutoToProdutoViewForm(x))
+		produtosforms = append(produtosforms, ProdutoToProdutoViewForm(*x))
 	}
 
 	numero, _ := contrlr.RequestNumero()
@@ -121,12 +122,12 @@ func (contrlr VendaDaoController) Update() error {
 	outvenda := VendaViewFormToVenda(outform)
 	c, _ := contrlr.clientemodel.GetIndex(outvenda.Cliente)
 	ogclient, _ := contrlr.clientemodel.GetById(c)
-	outvenda.Cliente = &ogclient
+	outvenda.Cliente = ogclient
 
 	for i, x := range outvenda.Itens {
 		prod, _ := contrlr.produtomodel.GetIndex(x.Produto)
 		ogprod, _ := contrlr.produtomodel.GetById(prod)
-		outvenda.Itens[i].Produto = &ogprod
+		outvenda.Itens[i].Produto = ogprod
 	}
 	if err := contrlr.vendamodel.Update(numero, &outvenda); err != nil {
 		fmt.Printf("%v", err.Error())

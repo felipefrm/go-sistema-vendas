@@ -11,12 +11,12 @@ type ClienteDao interface {
 	Update(i ClienteIndexType, u *model.Cliente) error
 	Delete(i ClienteIndexType) error
 	GetIndex(u *model.Cliente) (ClienteIndexType, error)
-	GetById(i ClienteIndexType) (model.Cliente, error)
-	GetAll() ([]model.Cliente, error)
+	GetById(i ClienteIndexType) (*model.Cliente, error)
+	GetAll() ([]*model.Cliente, error)
 }
 
 type ClienteDaoMap struct {
-	Model       map[ClienteIndexType]model.Cliente
+	Model       map[ClienteIndexType]*model.Cliente
 	Vendadaomap *VendaDaoMap
 }
 
@@ -28,9 +28,7 @@ func (dao ClienteDaoMap) Create(u *model.Cliente) error {
 	} else if _, err := dao.Model[(*u).Rg]; err {
 		return errors.Wrap(&lerror.InvalidKeyError{}, "RG já em uso.")
 	}
-	//fmt.Printf("%s", *u)
-	//dao.Model = make(map[ClienteIndexType]model.Cliente)
-	dao.Model[u.Rg] = *u
+	dao.Model[u.Rg] = u
 	return nil
 }
 
@@ -49,8 +47,11 @@ func (dao ClienteDaoMap) Update(i ClienteIndexType, u *model.Cliente) error {
 	if newindex != i {
 		dao.Vendadaomap.UpdateClienteKey(i, newindex)
 	}
-	dao.Delete(i)
-	dao.Model[u.Rg] = *u
+	var tmp *model.Cliente = dao.Model[i]
+	delete(dao.Model, i)
+	dao.Model[u.Rg] = tmp
+	*dao.Model[u.Rg] = *u
+	//fmt.Printf("TMP: %p", dao.Model[u.Rg])
 	return nil
 }
 
@@ -70,17 +71,17 @@ func (dao ClienteDaoMap) GetIndex(u *model.Cliente) (ClienteIndexType, error) {
 	return u.Rg, nil
 }
 
-func (dao ClienteDaoMap) GetById(i ClienteIndexType) (model.Cliente, error) {
+func (dao ClienteDaoMap) GetById(i ClienteIndexType) (*model.Cliente, error) {
 	if i == "" {
-		return model.Cliente{}, errors.Wrap(&lerror.InvalidKeyError{}, "Cliente inválido.")
+		return nil, errors.Wrap(&lerror.InvalidKeyError{}, "Cliente inválido.")
 	} else if _, err := dao.Model[i]; !err {
-		return model.Cliente{}, errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
+		return nil, errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
 	}
 	return dao.Model[i], nil
 }
 
-func (dao ClienteDaoMap) GetAll() ([]model.Cliente, error) {
-	v := make([]model.Cliente, 0, len(dao.Model))
+func (dao ClienteDaoMap) GetAll() ([]*model.Cliente, error) {
+	v := make([]*model.Cliente, 0, len(dao.Model))
 
 	for _, value := range dao.Model {
 		v = append(v, value)

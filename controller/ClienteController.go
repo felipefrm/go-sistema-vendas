@@ -41,7 +41,7 @@ func (contrlr ClienteDaoController) RequestRG() (string, error) {
 	clientes, _ := contrlr.model.GetAll()
 	var forms []view.ClienteViewForm
 	for _, x := range clientes {
-		forms = append(forms, ClienteToClienteViewForm(x))
+		forms = append(forms, ClienteToClienteViewForm(*x))
 	}
 	rg, _ := contrlr.view.RequestRg(forms)
 	return rg, nil
@@ -53,7 +53,7 @@ func (contrlr ClienteDaoController) Update() error {
 		fmt.Printf("%v", err.Error())
 		return err
 	} else {
-		form := ClienteToClienteViewForm(cliente)
+		form := ClienteToClienteViewForm(*cliente)
 		outform, _ := contrlr.view.Update(form)
 		outcliente := ClienteViewFormToCliente(outform)
 		if err := contrlr.model.Update(rg, &outcliente); err != nil {
@@ -71,7 +71,7 @@ func (contrlr ClienteDaoController) Delete() error {
 		fmt.Printf("%v", err.Error())
 		return err
 	}
-	i, err := contrlr.model.GetIndex(&cliente)
+	i, err := contrlr.model.GetIndex(cliente)
 	if err != nil {
 		fmt.Printf("%v", err.Error())
 		return err
@@ -86,7 +86,7 @@ func (contrlr ClienteDaoController) ListAll() error {
 	clientes, _ := contrlr.model.GetAll()
 	var forms []view.ClienteViewForm
 	for _, x := range clientes {
-		forms = append(forms, ClienteToClienteViewForm(x))
+		forms = append(forms, ClienteToClienteViewForm(*x))
 	}
 	contrlr.view.VisualizeAll(forms)
 	return nil

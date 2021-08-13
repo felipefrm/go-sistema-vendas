@@ -60,13 +60,11 @@ func (dao VendaDaoMap) Create(u *model.Venda) error {
 
 	dao.Model[u.Numero] = *u
 
-	//dao.ClientesVendasNumero[u.Cliente.Rg][u.Numero] = true
 	dao.InsertClientesVendasNumero(u.Cliente.Rg, u.Numero, true)
 
 	for _, item := range u.Itens {
 		dao.InsertProdutosVendasNumero(item.Produto.Codigo, u.Numero, true)
 	}
-	//dao.ClientesVendasNumero[u.Cliente.Rg]
 	return nil
 }
 
