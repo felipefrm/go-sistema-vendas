@@ -53,7 +53,19 @@ func (v VendaView) OptionsMenu() VendaOption {
 func (c VendaView) Create(clientesform []ClienteViewForm, produtosform []ProdutoViewForm) (VendaViewForm, error) {
 	data := time.Now().Format("01-02-2006")
 	//var produtoId, qtd int
-	var qtd int
+	var qtd, numero int
+
+	for {
+		fmt.Printf("\nInforme o número da venda: ")
+		_, err := fmt.Fscan(stdin, &numero)
+		stdin.ReadString('\n')
+		if err != nil {
+			fmt.Print(err)
+		} else {
+			break
+		}
+	}
+
 	clienteId, _ := c.clienteview.RequestRg(clientesform)
 
 	var itens []ItemVendaViewForm
@@ -66,7 +78,7 @@ func (c VendaView) Create(clientesform []ClienteViewForm, produtosform []Produto
 		}
 
 		for {
-			fmt.Printf("\nInforme a quantidade:\n")
+			fmt.Printf("\nInforme a quantidade: ")
 			_, err := fmt.Fscan(stdin, &qtd)
 			stdin.ReadString('\n')
 			if err != nil {
@@ -79,7 +91,7 @@ func (c VendaView) Create(clientesform []ClienteViewForm, produtosform []Produto
 		itens = append(itens, ItemVendaViewForm{Produto: ProdutoViewForm{Codigo: produtoId}, Qtd: qtd})
 	}
 
-	resultform := VendaViewForm{Data: data, Cliente: ClienteViewForm{Rg: clienteId}, Itens: itens}
+	resultform := VendaViewForm{Numero: numero, Data: data, Cliente: ClienteViewForm{Rg: clienteId}, Itens: itens}
 	return resultform, nil
 }
 
