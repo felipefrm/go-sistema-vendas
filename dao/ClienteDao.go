@@ -43,7 +43,7 @@ func (dao ClienteDaoMap) Update(i ClienteIndexType, u *model.Cliente) error {
 
 func (dao ClienteDaoMap) Delete(i ClienteIndexType) error {
 	if _, err := dao[i]; !err {
-		return errors.Wrap(lerror.InvalidKeyError{}, "Cliente não encontrado.")
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Cliente não encontrado.")
 	}
 	delete(dao, i)
 	return nil
