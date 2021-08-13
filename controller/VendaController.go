@@ -56,13 +56,29 @@ func (contrlr VendaDaoController) Create() error {
 	}
 	f, _ = contrlr.view.Create(clientesforms, produtosforms)
 	venda := VendaViewFormToVenda(f)
-	c, _ := contrlr.clientemodel.GetIndex(venda.Cliente)
-	ogclient, _ := contrlr.clientemodel.GetById(c)
+	c, err := contrlr.clientemodel.GetIndex(venda.Cliente)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
+	ogclient, err := contrlr.clientemodel.GetById(c)
+	if err != nil {
+		fmt.Printf("%v", err.Error())
+		return err
+	}
 	venda.Cliente = &ogclient
 
 	for i, x := range venda.Itens {
-		prod, _ := contrlr.produtomodel.GetIndex(x.Produto)
-		ogprod, _ := contrlr.produtomodel.GetById(prod)
+		prod, err := contrlr.produtomodel.GetIndex(x.Produto)
+		if err != nil {
+			fmt.Printf("%v", err.Error())
+			return err
+		}
+		ogprod, err := contrlr.produtomodel.GetById(prod)
+		if err != nil {
+			fmt.Printf("%v", err.Error())
+			return err
+		}
 		venda.Itens[i].Produto = &ogprod
 	}
 
