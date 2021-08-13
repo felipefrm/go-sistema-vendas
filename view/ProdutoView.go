@@ -165,6 +165,7 @@ func (c ProdutoView) Visualize(v ProdutoViewForm) error {
 }
 
 func (c ProdutoView) VisualizeAll(form []ProdutoViewForm) error {
+	fmt.Printf("(CÓDIGO)\tNOME\tVALOR\n")
 	for _, v := range form {
 		c.Visualize(v)
 	}

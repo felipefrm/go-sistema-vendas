@@ -165,6 +165,7 @@ func (c ClienteView) Visualize(form ClienteViewForm) error {
 }
 
 func (c ClienteView) VisualizeAll(form []ClienteViewForm) error {
+	fmt.Printf("(RG)\tNOME E SOBRENOME\tDATA DE NASCIMENTO\n")
 	for _, v := range form {
 		c.Visualize(v)
 	}

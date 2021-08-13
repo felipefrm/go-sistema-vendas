@@ -215,6 +215,7 @@ func (vv VendaView) Visualize(form VendaViewForm) error {
 }
 
 func (vv VendaView) VisualizeAll(form []VendaViewForm) error {
+	fmt.Printf("(NÚMERO)\tDATA\tCLIENTE\tITENS\n")
 	for _, v := range form {
 		vv.Visualize(v)
 	}
