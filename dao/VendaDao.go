@@ -84,7 +84,7 @@ func (dao VendaDaoMap) Update(i VendaIndexType, u *model.Venda) error {
 	i2, _ := dao.GetIndex(u)
 
 	dao.Delete(i)
-	dao.Model[i] = *u
+	dao.Model[i2] = *u
 	dao.InsertClientesVendasNumero(u.Cliente.Rg, i2, true)
 	for _, item := range u.Itens {
 		dao.InsertProdutosVendasNumero(item.Produto.Codigo, u.Numero, true)

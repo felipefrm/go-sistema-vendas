@@ -119,6 +119,15 @@ func (contrlr VendaDaoController) Update() error {
 	form := VendaToVendaViewForm(venda)
 	outform, _ := contrlr.view.Update(form, clientesforms, produtosforms)
 	outvenda := VendaViewFormToVenda(outform)
+	c, _ := contrlr.clientemodel.GetIndex(outvenda.Cliente)
+	ogclient, _ := contrlr.clientemodel.GetById(c)
+	outvenda.Cliente = &ogclient
+
+	for i, x := range outvenda.Itens {
+		prod, _ := contrlr.produtomodel.GetIndex(x.Produto)
+		ogprod, _ := contrlr.produtomodel.GetById(prod)
+		outvenda.Itens[i].Produto = &ogprod
+	}
 	if err := contrlr.vendamodel.Update(numero, &outvenda); err != nil {
 		fmt.Printf("%v", err.Error())
 		return err
