@@ -4,6 +4,8 @@ import (
 	dao "github.com/felipefrm/go-sistema-vendas/dao"
 	model "github.com/felipefrm/go-sistema-vendas/model"
 	view "github.com/felipefrm/go-sistema-vendas/view"
+	lerror "github.com/felipefrm/go-sistema-vendas/lerror"
+	errors "github.com/pkg/errors"
 )
 
 type VendaDaoController struct {
@@ -14,14 +16,26 @@ type VendaDaoController struct {
 }
 
 func ItemVendaViewFormToItemVenda(itemvenda view.ItemVendaViewForm) model.ItemVenda {
+	if itemvenda == nil {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Item inválido.")
+	}
+
 	return model.ItemVenda{Produto: ProdutoViewFormToProduto(itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
 }
 
 func ItemVendaToItemVendaViewForm(itemvenda model.ItemVenda) view.ItemVendaViewForm {
+	if itemvenda == nil {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Item inválido.")
+	}
+
 	return view.ItemVendaViewForm{Produto: ProdutoToProdutoViewForm(itemvenda.Produto), Valor: itemvenda.Valor, Qtd: itemvenda.Qtd}
 }
 
 func VendaViewFormToVenda(venda view.VendaViewForm) model.Venda {
+	if venda == nil {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
+	}
+
 	var itens []model.ItemVenda
 	for _, x := range venda.Itens {
 		itens = append(itens, ItemVendaViewFormToItemVenda(x))
@@ -31,6 +45,10 @@ func VendaViewFormToVenda(venda view.VendaViewForm) model.Venda {
 }
 
 func VendaToVendaViewForm(venda model.Venda) view.VendaViewForm {
+	if venda == nil {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Venda inválida.")
+	}
+
 	var itensforms []view.ItemVendaViewForm
 	for _, x := range venda.Itens {
 		itensforms = append(itensforms, ItemVendaToItemVendaViewForm(x))

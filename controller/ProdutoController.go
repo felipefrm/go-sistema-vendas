@@ -4,6 +4,8 @@ import (
 	dao "github.com/felipefrm/go-sistema-vendas/dao"
 	model "github.com/felipefrm/go-sistema-vendas/model"
 	view "github.com/felipefrm/go-sistema-vendas/view"
+	lerror "github.com/felipefrm/go-sistema-vendas/lerror"
+	errors "github.com/pkg/errors"
 )
 
 type ProdutoDaoController struct {
@@ -12,10 +14,18 @@ type ProdutoDaoController struct {
 }
 
 func ProdutoViewFormToProduto(f view.ProdutoViewForm) model.Produto {
+	if f == nil {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
+	}
+
 	return model.Produto{Codigo: f.Codigo, Nome: f.Nome, Valor: f.Valor}
 }
 
 func ProdutoToProdutoViewForm(produto model.Produto) view.ProdutoViewForm {
+	if produto == nil {
+		return errors.Wrap(&lerror.InvalidKeyError{}, "Produto inválido.")
+	}
+	
 	return view.ProdutoViewForm{
 		Codigo: produto.Codigo,
 		Nome:   produto.Nome,
